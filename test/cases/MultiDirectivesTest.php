@@ -14,7 +14,7 @@ class MultiDirectivesTest extends \PHPUnit_Framework_TestCase
      * @param string $bot
      * @param string $headers
      */
-    public function export($url, $bot, $headers)
+    public function testMultipleDirectives($url, $bot, $headers)
     {
         $parser = new XRobotsTagParser($url, $bot, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);

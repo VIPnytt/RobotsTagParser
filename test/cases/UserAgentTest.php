@@ -9,7 +9,7 @@ class UserAgentTests extends \PHPUnit_Framework_TestCase
     /**
      * Character case
      */
-    public function characterCase()
+    public function testCharacterCase()
     {
         $parser = new UserAgentParser('GoogleBot');
         $this->assertInstanceOf('vipnytt\robot\UserAgentParser', $parser);
@@ -20,7 +20,7 @@ class UserAgentTests extends \PHPUnit_Framework_TestCase
     /**
      * Strip version
      */
-    public function stripVersion()
+    public function testStripVersion()
     {
         $parser = new UserAgentParser('googlebot/2.1');
         $this->assertInstanceOf('vipnytt\robot\UserAgentParser', $parser);
@@ -31,7 +31,7 @@ class UserAgentTests extends \PHPUnit_Framework_TestCase
     /**
      * Find match
      */
-    public function match()
+    public function testMatch()
     {
         $parser = new UserAgentParser('googlebot-news');
         $this->assertInstanceOf('vipnytt\robot\UserAgentParser', $parser);
@@ -44,7 +44,7 @@ class UserAgentTests extends \PHPUnit_Framework_TestCase
     /**
      * Get all
      */
-    public function export()
+    public function testExport()
     {
         $parser = new UserAgentParser('googlebot-news/2.1');
         $this->assertInstanceOf('vipnytt\robot\UserAgentParser', $parser);

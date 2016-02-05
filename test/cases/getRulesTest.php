@@ -14,7 +14,7 @@ class getRulesTest extends \PHPUnit_Framework_TestCase
      * @param string $bot
      * @param string $headers
      */
-    public function getRules($url, $bot, $headers)
+    public function testGetRules($url, $bot, $headers)
     {
         $parser = new XRobotsTagParser($url, $bot, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
