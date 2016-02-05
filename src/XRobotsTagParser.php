@@ -11,8 +11,7 @@
 
 namespace vipnytt;
 
-use DateTime;
-use Exception;
+use vipnytt\robot\URLParser;
 use vipnytt\robot\UserAgentParser;
 
 class XRobotsTagParser
@@ -51,45 +50,19 @@ class XRobotsTagParser
      */
     public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, $headers = [])
     {
-        $this->url = $this->encodeURL(trim($url));
+        // Parse URL
+        $urlParser = new URLParser(trim($url));
+        if (!$urlParser->isValid()) {
+            trigger_error('Invalid URL', E_USER_WARNING);
+        }
+        $this->url = $urlParser->encode();
+        // Get headers
         $this->getHeaders($headers);
+        // Parse rules
         $this->parse();
-        $this->setUserAgent(trim($userAgent));
-    }
-
-    /**
-     * URL encoder according to RFC 3986
-     * Returns a string containing the encoded URL with disallowed characters converted to their percentage encodings.
-     * @link http://publicmind.in/blog/url-encoding/
-     *
-     * @param string $url
-     * @return string string
-     */
-    private static function encodeURL($url)
-    {
-        $reserved = array(
-            ":" => '!%3A!ui',
-            "/" => '!%2F!ui',
-            "?" => '!%3F!ui',
-            "#" => '!%23!ui',
-            "[" => '!%5B!ui',
-            "]" => '!%5D!ui',
-            "@" => '!%40!ui',
-            "!" => '!%21!ui',
-            "$" => '!%24!ui',
-            "&" => '!%26!ui',
-            "'" => '!%27!ui',
-            "(" => '!%28!ui',
-            ")" => '!%29!ui',
-            "*" => '!%2A!ui',
-            "+" => '!%2B!ui',
-            "," => '!%2C!ui',
-            ";" => '!%3B!ui',
-            "=" => '!%3D!ui',
-            "%" => '!%25!ui'
-        );
-        $url = preg_replace(array_values($reserved), array_keys($reserved), rawurlencode($url));
-        return $url;
+        // Set User-Agent
+        $parser = new UserAgentParser($userAgent);
+        $this->userAgent = $parser->match(array_keys($this->rules), self::USERAGENT_DEFAULT);
     }
 
     /**
@@ -103,12 +76,11 @@ class XRobotsTagParser
         $this->headers = $customHeaders;
         if (is_array($this->headers) && !empty($this->headers)) {
             return;
-        } else {
-            $this->headers = get_headers($this->url);
-            if (is_array($this->headers) && !empty($this->headers)) {
-                trigger_error('Unable to fetch HTTP headers', E_USER_ERROR);
-                return;
-            }
+        }
+        $this->headers = get_headers($this->url);
+        if (is_array($this->headers) && !empty($this->headers)) {
+            trigger_error('Unable to fetch HTTP headers', E_USER_ERROR);
+            return;
         }
     }
 
@@ -196,50 +168,16 @@ class XRobotsTagParser
             case self::DIRECTIVE_NO_ODP:
             case self::DIRECTIVE_NO_SNIPPET:
             case self::DIRECTIVE_NO_TRANSLATE:
-            $this->addDirectiveGeneric();
+            $this->rules[$this->currentUserAgent][$this->currentDirective] = true;
                 break;
             case self::DIRECTIVE_NONE:
-                $this->addDirectiveNone();
+                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
+                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_FOLLOW] = true;
                 break;
             case self::DIRECTIVE_UNAVAILABLE_AFTER:
-                $this->addDirectiveUnavailableAfter();
+                $dateTime = \DateTime::createFromFormat(DATE_RFC850, $this->currentValue);
+                $this->rules[$this->currentUserAgent][self::DIRECTIVE_UNAVAILABLE_AFTER] = $dateTime->getTimestamp();
                 break;
-        }
-    }
-
-    /**
-     * Add generic directives
-     *
-     * @return void
-     */
-    private function addDirectiveGeneric()
-    {
-        $this->rules[$this->currentUserAgent][$this->currentDirective] = true;
-    }
-
-    /**
-     * Add `NONE` directive
-     *
-     * @return void
-     */
-    private function addDirectiveNone()
-    {
-        $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
-        $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_FOLLOW] = true;
-    }
-
-    /**
-     * Add `UNAVAILABLE_AFTER` directive
-     *
-     * @return void
-     */
-    private function addDirectiveUnavailableAfter()
-    {
-        try {
-            $dateTime = DateTime::createFromFormat(DATE_RFC850, $this->currentValue);
-            $this->rules[$this->currentUserAgent][self::DIRECTIVE_UNAVAILABLE_AFTER] = $dateTime->getTimestamp();
-        } catch (Exception $e) {
-            // Invalid date format, do nothing
         }
     }
 
@@ -254,18 +192,6 @@ class XRobotsTagParser
         $this->currentUserAgent = self::USERAGENT_DEFAULT;
         $this->currentDirective = '';
         $this->currentValue = '';
-    }
-
-    /**
-     * Set UserAgent
-     *
-     * @param string $userAgent
-     * @return void
-     */
-    private function setUserAgent($userAgent)
-    {
-        $parser = new UserAgentParser($userAgent);
-        $this->userAgent = $parser->match(array_keys($this->rules), self::USERAGENT_DEFAULT);
     }
 
     /**

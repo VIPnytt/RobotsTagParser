@@ -10,7 +10,7 @@ namespace vipnytt\robot;
 class UserAgentParser
 {
     private $userAgent;
-    private $userAgent_groups = [];
+    private $groups = [];
 
     /**
      * Constructor
@@ -30,13 +30,13 @@ class UserAgentParser
      */
     private function explode()
     {
-        $this->userAgent_groups = [$this->userAgent];
-        $this->userAgent_groups[] = $this->stripVersion();
-        while (strpos(end($this->userAgent_groups), '-') !== false) {
-            $current = end($this->userAgent_groups);
-            $this->userAgent_groups[] = substr($current, 0, strrpos($current, '-'));
+        $this->groups = [$this->userAgent];
+        $this->groups[] = $this->stripVersion();
+        while (strpos(end($this->groups), '-') !== false) {
+            $current = end($this->groups);
+            $this->groups[] = substr($current, 0, strrpos($current, '-'));
         }
-        $this->userAgent_groups = array_unique($this->userAgent_groups);
+        $this->groups = array_unique($this->groups);
     }
 
     /**
@@ -63,7 +63,7 @@ class UserAgentParser
     {
         foreach ($array as $userAgent) {
             $userAgent = mb_strtolower(trim($userAgent));
-            if (in_array($userAgent, $this->userAgent_groups)) {
+            if (in_array($userAgent, $this->groups)) {
                 return $userAgent;
             }
         }
@@ -77,6 +77,6 @@ class UserAgentParser
      */
     public function export()
     {
-        return $this->userAgent_groups;
+        return $this->groups;
     }
 }
