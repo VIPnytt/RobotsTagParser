@@ -33,8 +33,8 @@
     }
   ],
   "autoload": {
-    "classmap": [
-      "src/XRobotsTagParser.php"
-    ]
+    "psr-4": {
+      "vipnytt\\": "src/"
+    }
   }
 }

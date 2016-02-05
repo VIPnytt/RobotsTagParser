@@ -13,10 +13,12 @@ namespace vipnytt;
 
 use DateTime;
 use Exception;
+use vipnytt\robot\UserAgentParser;
 
 class XRobotsTagParser
 {
-    const RULE_IDENTIFIER = 'x-robots-tag';
+    const HEADER_RULE_IDENTIFIER = 'x-robots-tag';
+    const USERAGENT_DEFAULT = 'robots';
 
     const DIRECTIVE_ALL = 'all';
     const DIRECTIVE_NONE = 'none';
@@ -30,13 +32,11 @@ class XRobotsTagParser
     const DIRECTIVE_UNAVAILABLE_AFTER = 'unavailable_after';
 
     private $url = '';
-    private $userAgent = '';
-    private $userAgent_groups = [''];
-    private $userAgent_match = '';
+    private $userAgent = self::USERAGENT_DEFAULT;
 
     private $headers = [];
     private $currentRule = '';
-    private $currentUserAgent = '';
+    private $currentUserAgent = self::USERAGENT_DEFAULT;
     private $currentDirective = '';
     private $currentValue = '';
 
@@ -45,16 +45,14 @@ class XRobotsTagParser
     /**
      * Constructor
      *
-     * @param  string $url
-     * @param  string $userAgent
+     * @param string $url
+     * @param string $userAgent
      * @param array $headers
      */
-    public function __construct($url, $userAgent = '', $headers = [])
+    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, $headers = [])
     {
         $this->url = $this->encodeURL(trim($url));
-        if (empty($headers)) {
-            $this->getHeaders();
-        }
+        $this->getHeaders($headers);
         $this->parse();
         $this->setUserAgent(trim($userAgent));
     }
@@ -97,11 +95,21 @@ class XRobotsTagParser
     /**
      * Request HTTP headers
      *
+     * @param array $customHeaders - use these headers
      * @return void
      */
-    private function getHeaders()
+    private function getHeaders($customHeaders = [])
     {
-        $this->headers = get_headers($this->url);
+        $this->headers = $customHeaders;
+        if (is_array($this->headers) && !empty($this->headers)) {
+            return;
+        } else {
+            $this->headers = get_headers($this->url);
+            if (is_array($this->headers) && !empty($this->headers)) {
+                trigger_error('Unable to fetch HTTP headers', E_USER_ERROR);
+                return;
+            }
+        }
     }
 
     /**
@@ -113,13 +121,14 @@ class XRobotsTagParser
     {
         foreach ($this->headers as $header) {
             $parts = explode(':', mb_strtolower($header), 2);
-            if (count($parts) < 2 || $parts[0] != self::RULE_IDENTIFIER) {
+            if (count($parts) < 2 || $parts[0] != self::HEADER_RULE_IDENTIFIER) {
                 // Header is not a rule
                 continue;
             }
             $this->currentRule = trim($parts[1]);
             $this->detectDirectives();
         }
+
     }
 
     /**
@@ -130,13 +139,12 @@ class XRobotsTagParser
     private function detectDirectives()
     {
         $rules = explode(',', $this->currentRule);
-        $first = true;
         foreach ($rules as $rule) {
             $part = explode(':', $rule, 3);
             $part[0] = trim($part[0]);
             $part[1] = isset($part[1]) ? trim($part[1]) : '';
             $part[2] = isset($part[2]) ? trim($part[2]) : '';
-            if ($first && count($part) >= 2 && !in_array($part[0], $this->directiveArray())) {
+            if ($rules[0] === $rule && count($part) >= 2 && !in_array($part[0], $this->directiveArray())) {
                 $this->currentUserAgent = $part[0];
                 if (in_array($part[1], $this->directiveArray())) {
                     $this->currentDirective = $part[1];
@@ -148,8 +156,8 @@ class XRobotsTagParser
                 $this->currentValue = $part[1];
                 $this->addRule();
             }
-            $first = false;
         }
+        $this->cleanup();
     }
 
     /**
@@ -194,10 +202,9 @@ class XRobotsTagParser
                 $this->addDirectiveNone();
                 break;
             case self::DIRECTIVE_UNAVAILABLE_AFTER:
-                $this->addDirectiveUnavailableAfter($this->currentValue);
+                $this->addDirectiveUnavailableAfter();
                 break;
         }
-        $this->cleanup();
     }
 
     /**
@@ -224,13 +231,12 @@ class XRobotsTagParser
     /**
      * Add `UNAVAILABLE_AFTER` directive
      *
-     * @param string $rfc850 - datetime
      * @return void
      */
-    private function addDirectiveUnavailableAfter($rfc850)
+    private function addDirectiveUnavailableAfter()
     {
         try {
-            $dateTime = DateTime::createFromFormat(DATE_RFC850, $rfc850);
+            $dateTime = DateTime::createFromFormat(DATE_RFC850, $this->currentValue);
             $this->rules[$this->currentUserAgent][self::DIRECTIVE_UNAVAILABLE_AFTER] = $dateTime->getTimestamp();
         } catch (Exception $e) {
             // Invalid date format, do nothing
@@ -244,10 +250,10 @@ class XRobotsTagParser
      */
     private function cleanup()
     {
-        $this->currentRule = null;
-        $this->currentUserAgent = null;
-        $this->currentDirective = null;
-        $this->currentValue = null;
+        $this->currentRule = '';
+        $this->currentUserAgent = self::USERAGENT_DEFAULT;
+        $this->currentDirective = '';
+        $this->currentValue = '';
     }
 
     /**
@@ -258,56 +264,8 @@ class XRobotsTagParser
      */
     private function setUserAgent($userAgent)
     {
-        $this->userAgent = mb_strtolower($userAgent);
-        $this->explodeUserAgent();
-    }
-
-    /**
-     * Parses all possible UserAgent groups to an array
-     *
-     * @return array
-     */
-    private function explodeUserAgent()
-    {
-        $this->userAgent_groups = array($this->userAgent);
-        $this->userAgent_groups[] = $this->stripUserAgentVersion($this->userAgent);
-        while (strpos(end($this->userAgent_groups), '-') !== false) {
-            $current = end($this->userAgent_groups);
-            $this->userAgent_groups[] = substr($current, 0, strrpos($current, '-'));
-        }
-        $this->userAgent_groups[] = '';
-        $this->userAgent_groups = array_unique($this->userAgent_groups);
-        $this->determineUserAgentGroup();
-    }
-
-    /**
-     * Removes the UserAgent version
-     *
-     * @param string $userAgent
-     * @return string
-     */
-    private static function stripUserAgentVersion($userAgent)
-    {
-        if (strpos($userAgent, '/') !== false) {
-            return explode('/', $userAgent, 2)[0];
-        }
-        return $userAgent;
-    }
-
-    /**
-     * Determine the correct user agent group
-     *
-     * @return void
-     */
-    private function determineUserAgentGroup()
-    {
-        foreach ($this->userAgent_groups as $group) {
-            if (isset($this->rules[$group])) {
-                $this->userAgent_match = $group;
-                return;
-            }
-        }
-        $this->userAgent_match = '';
+        $parser = new UserAgentParser($userAgent);
+        $this->userAgent = $parser->match(array_keys($this->rules), self::USERAGENT_DEFAULT);
     }
 
     /**
@@ -317,10 +275,17 @@ class XRobotsTagParser
      */
     public function getRules()
     {
-        if (isset($this->rules[$this->userAgent_match])) {
-            return array_merge($this->rules[''], $this->rules[$this->userAgent_match]);
+        $rules = [];
+        // Default UserAgent
+        if (isset($this->rules[self::USERAGENT_DEFAULT])) {
+            $rules = array_merge($rules, $this->rules[self::USERAGENT_DEFAULT]);
         }
-        return $this->rules[''];
+        // Matching UserAgent
+        if (isset($this->rules[$this->userAgent])) {
+            $rules = array_merge($rules, $this->rules[$this->userAgent]);
+        }
+        // Result
+        return $rules;
     }
 
     /**
