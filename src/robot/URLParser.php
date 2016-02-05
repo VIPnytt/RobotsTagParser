@@ -7,7 +7,7 @@
 
 namespace vipnytt\robot;
 
-class URLParser
+final class URLParser
 {
     private $url;
 

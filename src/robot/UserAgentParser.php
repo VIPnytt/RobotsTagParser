@@ -7,7 +7,7 @@
 
 namespace vipnytt\robot;
 
-class UserAgentParser
+final class UserAgentParser
 {
     private $userAgent;
     private $groups = [];

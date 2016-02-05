@@ -175,7 +175,8 @@ class XRobotsTagParser
                 $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_FOLLOW] = true;
                 break;
             case self::DIRECTIVE_UNAVAILABLE_AFTER:
-                $dateTime = \DateTime::createFromFormat(DATE_RFC850, $this->currentValue);
+                $dateTime = new \DateTime();
+                $dateTime->createFromFormat(DATE_RFC850, $this->currentValue);
                 $this->rules[$this->currentUserAgent][self::DIRECTIVE_UNAVAILABLE_AFTER] = $dateTime->getTimestamp();
                 break;
         }
