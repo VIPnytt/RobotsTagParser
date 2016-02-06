@@ -36,8 +36,8 @@ class UserAgentTests extends \PHPUnit_Framework_TestCase
         $parser = new UserAgentParser('googlebot-news');
         $this->assertInstanceOf('vipnytt\robot\UserAgentParser', $parser);
 
-        $this->assertEquals('googlebot-news', $parser->match(['googlebot', 'googlebot-news', 'google', 'gooblebot-news-unknown']));
-        $this->assertEquals('googlebot', $parser->match(['googlebot', 'bingbot', 'mybot', '']));
+        $this->assertEquals('googlebot-news', $parser->match(['googlebot', 'googlebot-news', 'google', 'gooblebot-news-unknown'], '*'));
+        $this->assertEquals('googlebot', $parser->match(['googlebot', 'bingbot', 'mybot', ''], '*'));
         $this->assertEquals('*', $parser->match(['yandexbot', 'bingbot', 'mybot', ''], '*'));
     }
 

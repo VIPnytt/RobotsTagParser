@@ -26,19 +26,19 @@ and then use composer to load the lib:
 You can find out more about Composer here: https://getcomposer.org/
 
 
-## Usage:
+## Usage
 *Coming soon...*
 
-## Directives supported:
-- [x] ````all```` - There are no restrictions for indexing or serving. Note: this directive is the default value and has no effect if explicitly listed.
+## Directives
+### Supported:
+- [x] ````all```` - There are no restrictions for indexing or serving.
+- [x] ````none```` - Equivalent to ````noindex````, ````nofollow````
 - [x] ````noindex```` - Do not show this page in search results and do not show a "Cached" link in search results.
 - [x] ````nofollow```` - Do not follow the links on this page
-- [x] ````none```` - Equivalent to ````noindex````, ````nofollow````
 - [x] ````noarchive```` - Do not show a "Cached" link in search results.
 - [x] ````nosnippet```` - Do not show a snippet in the search results for this page
 - [x] ````noodp```` - Do not use metadata from the Open Directory project for titles or snippets shown for this page.
 - [x] ````notranslate```` - Do not offer translation of this page in search results.
 - [x] ````noimageindex```` - Do not index images on this page.
-- [ ] ````unavailable_after: [RFC-850 date/time]```` -Do not show this page in search results after the specified date/time. The date/time must be specified in the RFC 850 format.
-
-**Work in progress...**
+### Unsupported (work in progress):
+- [ ] ````unavailable_after: [RFC-850 date/time]```` -Do not show this page in search results after the specified date/time.

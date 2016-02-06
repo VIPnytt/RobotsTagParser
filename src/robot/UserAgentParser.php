@@ -61,9 +61,9 @@ final class UserAgentParser
      */
     public function match($array, $fallback = null)
     {
-        foreach ($array as $userAgent) {
+        foreach ($this->groups as $userAgent) {
             $userAgent = mb_strtolower(trim($userAgent));
-            if (in_array($userAgent, $this->groups)) {
+            if (in_array($userAgent, $array)) {
                 return $userAgent;
             }
         }
