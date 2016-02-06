@@ -30,11 +30,9 @@ final class URLParser
     {
         $this->encode();
         $parsed = parse_url($this->url);
-        $host = $this->isHostValid();
-        $scheme = $this->isSchemeValid();
         if ($parsed === false
-            || $host == false
-            || $scheme == false
+            || !$this->isHostValid()
+            || !$this->isSchemeValid()
         ) {
             return false;
         }
@@ -71,8 +69,7 @@ final class URLParser
             "=" => '!%3D!ui',
             "%" => '!%25!ui'
         ];
-        $this->url = preg_replace(array_values($reserved), array_keys($reserved), rawurlencode($this->url));
-        return $this->url;
+        return $this->url = preg_replace(array_values($reserved), array_keys($reserved), rawurlencode($this->url));
     }
 
     /**

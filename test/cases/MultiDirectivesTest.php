@@ -20,25 +20,25 @@ class MultiDirectivesTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertContains('noindex', $parser->getRules());
-        $this->assertContains('noindex', $parser->export()['robots']);
+        $this->assertContains('noindex', $parser->export()['']);
         $this->assertContains('noindex', $parser->export()['googlebot']);
         $this->assertContains('nofollow', $parser->getRules());
-        $this->assertContains('nofollow', $parser->export()['robots']);
+        $this->assertContains('nofollow', $parser->export()['']);
         $this->assertContains('nofollow', $parser->export()['googlebot']);
         $this->assertContains('noarchive', $parser->getRules());
-        $this->assertContains('noarchive', $parser->export()['robots']);
+        $this->assertContains('noarchive', $parser->export()['']);
         $this->assertContains('noarchive', $parser->export()['googlebot']);
         $this->assertContains('nosnippet', $parser->getRules());
-        $this->assertContains('nosnippet', $parser->export()['robots']);
+        $this->assertContains('nosnippet', $parser->export()['']);
         $this->assertContains('nosnippet', $parser->export()['googlebot']);
         $this->assertContains('noodp', $parser->getRules());
-        $this->assertContains('noodp', $parser->export()['robots']);
+        $this->assertContains('noodp', $parser->export()['']);
         $this->assertContains('noodp', $parser->export()['googlebot']);
         $this->assertContains('notranslate', $parser->getRules());
-        $this->assertContains('notranslate', $parser->export()['robots']);
+        $this->assertContains('notranslate', $parser->export()['']);
         $this->assertContains('notranslate', $parser->export()['googlebot']);
         $this->assertContains('noimageindex', $parser->getRules());
-        $this->assertContains('noimageindex', $parser->export()['robots']);
+        $this->assertContains('noimageindex', $parser->export()['']);
         $this->assertContains('noimageindex', $parser->export()['googlebot']);
     }
 
@@ -49,20 +49,22 @@ class MultiDirectivesTest extends \PHPUnit_Framework_TestCase
     public function generateDataForTest()
     {
         return [
-            ['http://example.com/'],
-            ['googlebot'],
             [
-                'X-Robots-Tag: all',
-                'X-Robots-Tag: noindex',
-                'X-Robots-Tag: nofollow',
-                'X-Robots-Tag: none',
-                'X-Robots-Tag: noarchive',
-                'X-Robots-Tag: nosnippet',
-                'X-Robots-Tag: noodp',
-                'X-Robots-Tag: notranslate',
-                'X-Robots-Tag: noimageindex',
-                'X-Robots-Tag: unavailable_after: 25 Jun 2010 15:00:00 PST',
-                'X-Robots-Tag: googlebot: all, none, nofollow,nosnippet,notranslate unavailable_after: 25 Jun 2010 15:00:00 PST, noindex, noarchive, noodp,noimageindex'
+                'http://example.com/',
+                'googlebot',
+                [
+                    'X-Robots-Tag: all',
+                    'X-Robots-Tag: noindex',
+                    'X-Robots-Tag: nofollow',
+                    'X-Robots-Tag: none',
+                    'X-Robots-Tag: noarchive',
+                    'X-Robots-Tag: nosnippet',
+                    'X-Robots-Tag: noodp',
+                    'X-Robots-Tag: notranslate',
+                    'X-Robots-Tag: noimageindex',
+                    'X-Robots-Tag: unavailable_after: 25 Jun 2010 15:00:00 PST',
+                    'X-Robots-Tag: googlebot: all, none, nofollow,nosnippet,notranslate unavailable_after: 25 Jun 2010 15:00:00 PST, noindex, noarchive, noodp,noimageindex'
+                ]
             ]
         ];
     }

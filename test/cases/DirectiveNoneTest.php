@@ -23,9 +23,9 @@ class DirectiveNoneTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('none', $parser->getRules());
         $this->assertContains('none', $parser->getRules());
 
-        $this->assertContains('noindex', $parser->export()['robots']);
-        $this->assertContains('noindex', $parser->export()['robots']);
-        $this->assertContains('noindex', $parser->export()['robots']);
+        $this->assertContains('noindex', $parser->export()['']);
+        $this->assertContains('noindex', $parser->export()['']);
+        $this->assertContains('noindex', $parser->export()['']);
 
         $this->assertContains('nofollow', $parser->export()['googlebot']);
         $this->assertContains('nofollow', $parser->export()['googlebot']);
@@ -39,11 +39,13 @@ class DirectiveNoneTest extends \PHPUnit_Framework_TestCase
     public function generateDataForTest()
     {
         return [
-            ['http://example.com/'],
-            ['googlebot'],
             [
-                'X-Robots-Tag: none',
-                'X-Robots-Tag: googlebot: none'
+                'http://example.com/',
+                'googlebot',
+                [
+                    'X-Robots-Tag: none',
+                    'X-Robots-Tag: googlebot: none'
+                ]
             ]
         ];
     }

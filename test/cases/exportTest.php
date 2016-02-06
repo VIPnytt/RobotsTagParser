@@ -25,8 +25,8 @@ class exportTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('noindex', $parser->export()['bingbot']);
         $this->assertContains('noodp', $parser->export()['bingbot']);
 
-        $this->assertContains('noindex', $parser->export()['robot']);
-        $this->assertContains('noodp', $parser->export()['robot']);
+        $this->assertContains('noindex', $parser->export()['']);
+        $this->assertContains('noodp', $parser->export()['']);
     }
 
     /**
@@ -36,12 +36,14 @@ class exportTest extends \PHPUnit_Framework_TestCase
     public function generateDataForTest()
     {
         return [
-            ['http://example.com/'],
-            ['googlebot'],
             [
-                'X-Robots-Tag: googlebot: noindex, noarchive',
-                'X-Robots-Tag: bingbot: noindex, noodp',
-                'X-Robots-Tag: noindex, noodp'
+                'http://example.com/',
+                'googlebot',
+                [
+                    'X-Robots-Tag: googlebot: noindex, noarchive',
+                    'X-Robots-Tag: bingbot: noindex, noodp',
+                    'X-Robots-Tag: noindex, noodp'
+                ]
             ]
         ];
     }

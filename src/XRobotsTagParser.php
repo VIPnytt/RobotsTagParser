@@ -5,6 +5,10 @@
  * @author VIP nytt (vipnytt@gmail.com)
  * @author Jan-Petter Gundersen (europe.jpg@gmail.com)
  *
+ * Project:
+ * @link https://github.com/VIPnytt/X-Robots-Tag-parser
+ * @license https://opensource.org/licenses/MIT MIT license
+ *
  * Specification:
  * @link https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#using-the-x-robots-tag-http-header
  */
@@ -18,7 +22,7 @@ use vipnytt\robot\UserAgentParser;
 class XRobotsTagParser
 {
     const HEADER_RULE_IDENTIFIER = 'x-robots-tag';
-    const USERAGENT_DEFAULT = 'robots';
+    const USERAGENT_DEFAULT = '';
 
     const DIRECTIVE_ALL = 'all';
     const DIRECTIVE_NONE = 'none';
@@ -58,7 +62,7 @@ class XRobotsTagParser
         }
         $this->url = $urlParser->encode();
         // Get headers
-        $this->getHeaders($headers);
+        $this->setHeaders($headers);
         // Parse rules
         $this->parse();
         // Set User-Agent
@@ -72,7 +76,7 @@ class XRobotsTagParser
      * @param array $customHeaders - use these headers
      * @return void
      */
-    private function getHeaders($customHeaders = [])
+    private function setHeaders($customHeaders = [])
     {
         $this->headers = $customHeaders;
         if (is_array($this->headers) && !empty($this->headers)) {

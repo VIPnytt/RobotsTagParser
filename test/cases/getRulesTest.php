@@ -31,12 +31,14 @@ class getRulesTest extends \PHPUnit_Framework_TestCase
     public function generateDataForTest()
     {
         return [
-            ['http://example.com/'],
-            ['googlebot'],
             [
-                'X-Robots-Tag: googlebot: noindex, noarchive',
-                'X-Robots-Tag: bingbot: noindex, noodp',
-                'X-Robots-Tag: noindex, noodp'
+                'http://example.com/',
+                'googlebot',
+                [
+                    'X-Robots-Tag: googlebot: noindex, noarchive',
+                    'X-Robots-Tag: bingbot: noindex, noodp',
+                    'X-Robots-Tag: noindex, noodp'
+                ]
             ]
         ];
     }
