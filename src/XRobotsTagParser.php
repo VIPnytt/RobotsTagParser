@@ -34,14 +34,12 @@ class XRobotsTagParser
     const DIRECTIVE_NO_TRANSLATE = 'notranslate';
     const DIRECTIVE_UNAVAILABLE_AFTER = 'unavailable_after';
 
-    // TODO: Shuld be RFC-850, but disabled due to an rule parsing bug
     const DATE_FORMAT_DEFAULT = 'd M Y H:i:s T';
 
     private $supportedDateFormats = [
         self::DATE_FORMAT_DEFAULT,
-        DATE_RFC1123,
-        DATE_RFC850,
-        'd M Y H:i:s T'
+        DATE_RFC850, // from Google specification
+        'd M Y H:i:s T' // from Google examples
     ];
 
     private $strict = false;
@@ -137,7 +135,7 @@ class XRobotsTagParser
             }
             if (in_array($pair[0], $this->directiveArray())) {
                 $this->currentDirective = $pair[0];
-                $this->currentValue = isset($pair[1]) ? $pair[1] : null;
+                $this->currentValue = isset($pair[1]) ? $pair[1] : '';
                 $this->addRule();
             }
         }
@@ -173,6 +171,16 @@ class XRobotsTagParser
     private function addRule()
     {
         switch ($this->currentDirective) {
+            case self::DIRECTIVE_ALL:
+                if (!$this->strict) break;
+                $this->rules[$this->currentUserAgent][self::DIRECTIVE_ALL] = true;
+                break;
+            case self::DIRECTIVE_NONE:
+                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NONE] = true;
+                if ($this->strict) break;
+                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
+                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_FOLLOW] = true;
+                break;
             case self::DIRECTIVE_NO_ARCHIVE:
             case self::DIRECTIVE_NO_FOLLOW:
             case self::DIRECTIVE_NO_IMAGE_INDEX:
@@ -182,18 +190,12 @@ class XRobotsTagParser
             case self::DIRECTIVE_NO_TRANSLATE:
             $this->rules[$this->currentUserAgent][$this->currentDirective] = true;
                 break;
-            case self::DIRECTIVE_NONE:
-                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NONE] = true;
-                if ($this->strict) break;
-                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
-                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_FOLLOW] = true;
-                break;
             case self::DIRECTIVE_UNAVAILABLE_AFTER:
                 if ($this->strict) $this->supportedDateFormats = [self::DATE_FORMAT_DEFAULT];
                 foreach (array_unique($this->supportedDateFormats) as $format) {
                     $dateTime = date_create_from_format($format, $this->currentValue);
                     if ($dateTime === false) continue;
-                    $this->rules[$this->currentUserAgent][self::DIRECTIVE_UNAVAILABLE_AFTER] = $dateTime->format(self::DATE_FORMAT_DEFAULT);
+                    $this->rules[$this->currentUserAgent][self::DIRECTIVE_UNAVAILABLE_AFTER] = $dateTime->format(DATE_RFC850);
                     if ($this->strict) break;
                     if (time() >= $dateTime->getTimestamp()) {
                         $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
@@ -205,7 +207,7 @@ class XRobotsTagParser
     }
 
     /**
-     * CleanUp before next rule read
+     * Cleanup before next rule is read
      *
      * @return void
      */

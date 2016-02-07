@@ -22,9 +22,9 @@ class UnavailableAfterStrictTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         // TODO: Disabled due to an RFC-850 parsing bug
-        //$this->assertEquals(['unavailable_after' => '01 Jul 2000 07:00:00 PST'], $parser->getRules());
-        //$this->assertEquals(['unavailable_after' => '31 Dec 2050 23:00:00 PST'], $parser->export()['']);
-        //$this->assertEquals(['unavailable_after' => '01 Jul 2000 07:00:00 PST'], $parser->export()['googlebot']);
+        //$this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->getRules());
+        //$this->assertEquals(['unavailable_after' => 'Saturday, 31-Dec-50 23:00:00 PST'], $parser->export()['']);
+        //$this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->export()['googlebot']);
         //$this->assertArrayNotHasKey('unavailable_after', $parser->export()['bingbot']);
     }
 
