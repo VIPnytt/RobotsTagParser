@@ -2,7 +2,7 @@
 
 namespace vipnytt\robot\UserAgentParser\tests;
 
-use vipnytt\robot\UserAgentParser;
+use vipnytt\XRobotsTagParser\UserAgentParser;
 
 class UserAgentTest extends \PHPUnit_Framework_TestCase
 {
