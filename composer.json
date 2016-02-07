@@ -1,7 +1,6 @@
 {
   "name": "vipnytt/x-robots-tag-parser",
   "description": "X-Robots-Tag HTTP header parser class",
-  "version": "0.1-alpha",
   "keywords": [
     "X-Robots",
     "X-Robots-Tag",

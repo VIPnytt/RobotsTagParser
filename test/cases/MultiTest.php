@@ -20,33 +20,33 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($url, $bot, $strict, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertContains(['noindex' => true], $parser->getRules());
-        $this->assertContains(['noindex' => true], $parser->export()['']);
-        $this->assertContains(['noindex' => true], $parser->export()['googlebot']);
+        $this->assertTrue($parser->getRules()['noindex']);
+        $this->assertTrue($parser->export()['']['noindex']);
+        $this->assertTrue($parser->export()['googlebot']['noindex']);
 
-        $this->assertContains(['nofollow' => true], $parser->getRules());
-        $this->assertContains(['nofollow' => true], $parser->export()['']);
-        $this->assertContains(['nofollow' => true], $parser->export()['googlebot']);
+        $this->assertTrue($parser->getRules()['nofollow']);
+        $this->assertTrue($parser->export()['']['nofollow']);
+        $this->assertTrue($parser->export()['googlebot']['nofollow']);
 
-        $this->assertContains(['noarchive' => true], $parser->getRules());
-        $this->assertContains(['noarchive' => true], $parser->export()['']);
-        $this->assertContains(['noarchive' => true], $parser->export()['googlebot']);
+        $this->assertTrue($parser->getRules()['noarchive']);
+        $this->assertTrue($parser->export()['']['noarchive']);
+        $this->assertTrue($parser->export()['googlebot']['noarchive']);
 
-        $this->assertContains(['nosnippet' => true], $parser->getRules());
-        $this->assertContains(['nosnippet' => true], $parser->export()['']);
-        $this->assertContains(['nosnippet' => true], $parser->export()['googlebot']);
+        $this->assertTrue($parser->getRules()['nosnippet']);
+        $this->assertTrue($parser->export()['']['nosnippet']);
+        $this->assertTrue($parser->export()['googlebot']['nosnippet']);
 
-        $this->assertContains(['noodp' => true], $parser->getRules());
-        $this->assertContains(['noodp' => true], $parser->export()['']);
-        $this->assertContains(['noodp' => true], $parser->export()['googlebot']);
+        $this->assertTrue($parser->getRules()['noodp']);
+        $this->assertTrue($parser->export()['']['noodp']);
+        $this->assertTrue($parser->export()['googlebot']['noodp']);
 
-        $this->assertContains(['notranslate' => true], $parser->getRules());
-        $this->assertContains(['notranslate' => true], $parser->export()['']);
-        $this->assertContains(['notranslate' => true], $parser->export()['googlebot']);
+        $this->assertTrue($parser->getRules()['notranslate']);
+        $this->assertTrue($parser->export()['']['notranslate']);
+        $this->assertTrue($parser->export()['googlebot']['notranslate']);
 
-        $this->assertContains(['noimageindex' => true], $parser->getRules());
-        $this->assertContains(['noimageindex' => true], $parser->export()['']);
-        $this->assertContains(['noimageindex' => true], $parser->export()['googlebot']);
+        $this->assertTrue($parser->getRules()['noimageindex']);
+        $this->assertTrue($parser->export()['']['noimageindex']);
+        $this->assertTrue($parser->export()['googlebot']['noimageindex']);
     }
 
     /**
@@ -73,7 +73,7 @@ class MultiTest extends \PHPUnit_Framework_TestCase
                     'X-Robots-Tag: notranslate',
                     'X-Robots-Tag: noimageindex',
                     'X-Robots-Tag: unavailable_after: 25 Jun 2010 15:00:00 PST',
-                    'X-Robots-Tag: googlebot: all, none, nofollow,nosnippet,notranslate unavailable_after: 25 Jun 2010 15:00:00 PST, noindex, noarchive, noodp,noimageindex'
+                    'X-Robots-Tag: googlebot: all, none, nofollow,nosnippet,notranslate, unavailable_after: 25 Jun 2010 15:00:00 PST, noindex, noarchive, noodp,noimageindex'
                 ]
             ]
         ];

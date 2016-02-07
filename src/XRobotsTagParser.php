@@ -15,6 +15,7 @@
 
 namespace vipnytt;
 
+use vipnytt\XRobotsTagParser\directive;
 use vipnytt\XRobotsTagParser\URLParser;
 use vipnytt\XRobotsTagParser\UserAgentParser;
 
@@ -181,15 +182,6 @@ class XRobotsTagParser
                 $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
                 $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_FOLLOW] = true;
                 break;
-            case self::DIRECTIVE_NO_ARCHIVE:
-            case self::DIRECTIVE_NO_FOLLOW:
-            case self::DIRECTIVE_NO_IMAGE_INDEX:
-            case self::DIRECTIVE_NO_INDEX:
-            case self::DIRECTIVE_NO_ODP:
-            case self::DIRECTIVE_NO_SNIPPET:
-            case self::DIRECTIVE_NO_TRANSLATE:
-            $this->rules[$this->currentUserAgent][$this->currentDirective] = true;
-                break;
             case self::DIRECTIVE_UNAVAILABLE_AFTER:
                 if ($this->strict) $this->supportedDateFormats = [self::DATE_FORMAT_DEFAULT];
                 foreach (array_unique($this->supportedDateFormats) as $format) {
@@ -203,6 +195,9 @@ class XRobotsTagParser
                     break;
                 }
                 break;
+            default:
+                $directive = new directive($this->currentDirective, $this->currentValue);
+                $this->rules[$this->currentUserAgent][$this->currentDirective] = $directive->getValue();
         }
     }
 

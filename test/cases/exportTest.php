@@ -20,14 +20,14 @@ class exportTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($url, $bot, $strict, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertContains(['noindex' => true], $parser->export()['googlebot']);
-        $this->assertContains(['noarchive' => true], $parser->export()['googlebot']);
+        $this->assertTrue($parser->export()['googlebot']['noindex']);
+        $this->assertTrue($parser->export()['googlebot']['noarchive']);
 
-        $this->assertContains(['noindex' => true], $parser->export()['bingbot']);
-        $this->assertContains(['noodp' => true], $parser->export()['bingbot']);
+        $this->assertTrue($parser->export()['bingbot']['noindex']);
+        $this->assertTrue($parser->export()['bingbot']['noodp']);
 
-        $this->assertContains(['noindex' => true], $parser->export()['']);
-        $this->assertContains(['noodp' => true], $parser->export()['']);
+        $this->assertTrue($parser->export()['']['noindex']);
+        $this->assertTrue($parser->export()['']['noodp']);
     }
 
     /**

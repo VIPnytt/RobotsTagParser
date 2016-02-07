@@ -20,17 +20,17 @@ class NoneTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($url, $bot, $strict, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertContains(['none' => true], $parser->getRules());
-        $this->assertContains(['noindex' => true], $parser->getRules());
-        $this->assertContains(['nofollow' => true], $parser->getRules());
+        $this->assertTrue($parser->getRules()['none']);
+        $this->assertTrue($parser->getRules()['noindex']);
+        $this->assertTrue($parser->getRules()['nofollow']);
 
-        $this->assertContains(['none' => true], $parser->export()['']);
-        $this->assertContains(['noindex' => true], $parser->export()['']);
-        $this->assertContains(['nofollow' => true], $parser->export()['']);
+        $this->assertTrue($parser->export()['']['none']);
+        $this->assertTrue($parser->export()['']['noindex']);
+        $this->assertTrue($parser->export()['']['nofollow']);
 
-        $this->assertContains(['none' => true], $parser->export()['googlebot']);
-        $this->assertContains(['noindex' => true], $parser->export()['googlebot']);
-        $this->assertContains(['nofollow' => true], $parser->export()['googlebot']);
+        $this->assertTrue($parser->export()['googlebot']['none']);
+        $this->assertTrue($parser->export()['googlebot']['noindex']);
+        $this->assertTrue($parser->export()['googlebot']['nofollow']);
     }
 
     /**
