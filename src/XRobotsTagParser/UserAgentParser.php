@@ -5,7 +5,7 @@
  * @author Jan-Petter Gundersen (europe.jpg@gmail.com)
  */
 
-namespace vipnytt\robot;
+namespace vipnytt\XRobotsTagParser;
 
 final class UserAgentParser
 {

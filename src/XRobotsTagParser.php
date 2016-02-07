@@ -15,8 +15,8 @@
 
 namespace vipnytt;
 
-use vipnytt\robot\URLParser;
-use vipnytt\robot\UserAgentParser;
+use vipnytt\XRobotsTagParser\URLParser;
+use vipnytt\XRobotsTagParser\UserAgentParser;
 
 class XRobotsTagParser
 {
