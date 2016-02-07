@@ -15,7 +15,6 @@
 
 namespace vipnytt;
 
-use DateTime;
 use vipnytt\robot\URLParser;
 use vipnytt\robot\UserAgentParser;
 
@@ -35,6 +34,18 @@ class XRobotsTagParser
     const DIRECTIVE_NO_TRANSLATE = 'notranslate';
     const DIRECTIVE_UNAVAILABLE_AFTER = 'unavailable_after';
 
+    // TODO: Shuld be RFC-850, but disabled due to an rule parsing bug
+    const DATE_FORMAT_DEFAULT = 'd M Y H:i:s T';
+
+    private $supportedDateFormats = [
+        self::DATE_FORMAT_DEFAULT,
+        DATE_RFC1123,
+        DATE_RFC850,
+        'd M Y H:i:s T'
+    ];
+
+    private $strict = false;
+
     private $url = '';
     private $userAgent = self::USERAGENT_DEFAULT;
 
@@ -51,10 +62,13 @@ class XRobotsTagParser
      *
      * @param string $url
      * @param string $userAgent
-     * @param array $headers
+     * @param bool $strict
+     * @param array|null $headers
      */
-    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, $headers = [])
+    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, $strict = false, $headers = null)
     {
+        $this->strict = $strict;
+
         // Parse URL
         $urlParser = new URLParser(trim($url));
         if (!$urlParser->isValid()) {
@@ -62,7 +76,7 @@ class XRobotsTagParser
         }
         $this->url = $urlParser->encode();
         // Get headers
-        $this->setHeaders($headers);
+        $this->useHeaders($headers);
         // Parse rules
         $this->parse();
         // Set User-Agent
@@ -73,20 +87,19 @@ class XRobotsTagParser
     /**
      * Request HTTP headers
      *
-     * @param array $customHeaders - use these headers
-     * @return void
+     * @param array|null|false $customHeaders - use these headers
+     * @return bool
      */
-    private function setHeaders($customHeaders = [])
+    private function useHeaders($customHeaders = null)
     {
-        $this->headers = $customHeaders;
-        if (is_array($this->headers) && !empty($this->headers)) {
-            return;
-        }
-        $this->headers = get_headers($this->url);
-        if (is_array($this->headers) && !empty($this->headers)) {
+        if ($customHeaders === false) {
             trigger_error('Unable to fetch HTTP headers', E_USER_ERROR);
-            return;
+            return false;
+        } elseif (!is_array($customHeaders) || empty($customHeaders)) {
+            return $this->useHeaders(get_headers($this->url));
         }
+        $this->headers = $customHeaders;
+        return true;
     }
 
     /**
@@ -117,20 +130,14 @@ class XRobotsTagParser
     {
         $rules = explode(',', $this->currentRule);
         foreach ($rules as $rule) {
-            $part = explode(':', $rule, 3);
-            $part[0] = trim($part[0]);
-            $part[1] = isset($part[1]) ? trim($part[1]) : '';
-            $part[2] = isset($part[2]) ? trim($part[2]) : '';
-            if ($rules[0] === $rule && count($part) >= 2 && !in_array($part[0], $this->directiveArray())) {
-                $this->currentUserAgent = $part[0];
-                if (in_array($part[1], $this->directiveArray())) {
-                    $this->currentDirective = $part[1];
-                    $this->currentValue = $part[2];
-                    $this->addRule();
-                }
-            } elseif (in_array($part[0], $this->directiveArray())) {
-                $this->currentDirective = $part[0];
-                $this->currentValue = $part[1];
+            $pair = array_map('trim', explode(':', $rule, 2));
+            if ($rules[0] === $rule && count($pair) == 2 && !in_array($pair[0], $this->directiveArray())) {
+                $this->currentUserAgent = $pair[0];
+                $pair = array_map('trim', explode(':', $pair[1], 2));
+            }
+            if (in_array($pair[0], $this->directiveArray())) {
+                $this->currentDirective = $pair[0];
+                $this->currentValue = isset($pair[1]) ? $pair[1] : null;
                 $this->addRule();
             }
         }
@@ -176,13 +183,23 @@ class XRobotsTagParser
             $this->rules[$this->currentUserAgent][$this->currentDirective] = true;
                 break;
             case self::DIRECTIVE_NONE:
+                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NONE] = true;
+                if ($this->strict) break;
                 $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
                 $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_FOLLOW] = true;
                 break;
             case self::DIRECTIVE_UNAVAILABLE_AFTER:
-                $dateTime = new DateTime();
-                $dateTime->createFromFormat(DATE_RFC850, $this->currentValue);
-                $this->rules[$this->currentUserAgent][self::DIRECTIVE_UNAVAILABLE_AFTER] = $dateTime->getTimestamp();
+                if ($this->strict) $this->supportedDateFormats = [self::DATE_FORMAT_DEFAULT];
+                foreach (array_unique($this->supportedDateFormats) as $format) {
+                    $dateTime = date_create_from_format($format, $this->currentValue);
+                    if ($dateTime === false) continue;
+                    $this->rules[$this->currentUserAgent][self::DIRECTIVE_UNAVAILABLE_AFTER] = $dateTime->format(self::DATE_FORMAT_DEFAULT);
+                    if ($this->strict) break;
+                    if (time() >= $dateTime->getTimestamp()) {
+                        $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
+                    }
+                    break;
+                }
                 break;
         }
     }

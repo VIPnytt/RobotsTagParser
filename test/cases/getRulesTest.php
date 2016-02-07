@@ -12,16 +12,17 @@ class getRulesTest extends \PHPUnit_Framework_TestCase
      * @dataProvider generateDataForTest
      * @param string $url
      * @param string $bot
-     * @param string $headers
+     * @param bool $strict
+     * @param array|null $headers
      */
-    public function testGetRules($url, $bot, $headers)
+    public function testGetRules($url, $bot, $strict, $headers)
     {
-        $parser = new XRobotsTagParser($url, $bot, $headers);
+        $parser = new XRobotsTagParser($url, $bot, $strict, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertContains('noindex', $parser->getRules());
-        $this->assertContains('noarchive', $parser->getRules());
-        $this->assertContains('noodp', $parser->getRules());
+        $this->assertContains(['noindex' => true], $parser->getRules());
+        $this->assertContains(['noarchive' => true], $parser->getRules());
+        $this->assertContains(['noodp' => true], $parser->getRules());
     }
 
     /**
@@ -34,6 +35,7 @@ class getRulesTest extends \PHPUnit_Framework_TestCase
             [
                 'http://example.com/',
                 'googlebot',
+                false,
                 [
                     'X-Robots-Tag: googlebot: noindex, noarchive',
                     'X-Robots-Tag: bingbot: noindex, noodp',

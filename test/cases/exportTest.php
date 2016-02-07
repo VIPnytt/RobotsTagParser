@@ -12,21 +12,22 @@ class exportTest extends \PHPUnit_Framework_TestCase
      * @dataProvider generateDataForTest
      * @param string $url
      * @param string $bot
-     * @param string $headers
+     * @param bool $strict
+     * @param array|null $headers
      */
-    public function testExport($url, $bot, $headers)
+    public function testExport($url, $bot, $strict, $headers)
     {
-        $parser = new XRobotsTagParser($url, $bot, $headers);
+        $parser = new XRobotsTagParser($url, $bot, $strict, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertContains('noindex', $parser->export()['googlebot']);
-        $this->assertContains('noarchive', $parser->export()['googlebot']);
+        $this->assertContains(['noindex' => true], $parser->export()['googlebot']);
+        $this->assertContains(['noarchive' => true], $parser->export()['googlebot']);
 
-        $this->assertContains('noindex', $parser->export()['bingbot']);
-        $this->assertContains('noodp', $parser->export()['bingbot']);
+        $this->assertContains(['noindex' => true], $parser->export()['bingbot']);
+        $this->assertContains(['noodp' => true], $parser->export()['bingbot']);
 
-        $this->assertContains('noindex', $parser->export()['']);
-        $this->assertContains('noodp', $parser->export()['']);
+        $this->assertContains(['noindex' => true], $parser->export()['']);
+        $this->assertContains(['noodp' => true], $parser->export()['']);
     }
 
     /**
@@ -39,6 +40,7 @@ class exportTest extends \PHPUnit_Framework_TestCase
             [
                 'http://example.com/',
                 'googlebot',
+                false,
                 [
                     'X-Robots-Tag: googlebot: noindex, noarchive',
                     'X-Robots-Tag: bingbot: noindex, noodp',

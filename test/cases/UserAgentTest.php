@@ -4,7 +4,7 @@ namespace vipnytt\robot\UserAgentParser\tests;
 
 use vipnytt\robot\UserAgentParser;
 
-class UserAgentTests extends \PHPUnit_Framework_TestCase
+class UserAgentTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Character case
