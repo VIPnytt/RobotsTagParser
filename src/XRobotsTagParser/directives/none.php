@@ -11,13 +11,23 @@ final class none implements directiveInterface
     {
     }
 
+    public function getDirective()
+    {
+        return self::DIRECTIVE;
+    }
+
     public function getArray()
     {
-        $result = [self::DIRECTIVE => true];
-        /*$test = new noindex();
-        $result = array_merge($result, $test->getArray());
-        $test = new nofollow();
-        $result = array_merge($result, $test->getArray());*/
+        $result = [self::DIRECTIVE => $this->getValue()];
+        $noindex = new noindex();
+        $result[$noindex->getDirective()] = $noindex->getValue();
+        $nofollow = new nofollow();
+        $result[$nofollow->getDirective()] = $nofollow->getValue();
         return $result;
+    }
+
+    public function getValue()
+    {
+        return true;
     }
 }

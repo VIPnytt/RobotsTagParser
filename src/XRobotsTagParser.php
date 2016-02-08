@@ -35,14 +35,6 @@ class XRobotsTagParser
     const DIRECTIVE_NO_TRANSLATE = 'notranslate';
     const DIRECTIVE_UNAVAILABLE_AFTER = 'unavailable_after';
 
-    const DATE_FORMAT_DEFAULT = 'd M Y H:i:s T';
-
-    private $supportedDateFormats = [
-        self::DATE_FORMAT_DEFAULT,
-        DATE_RFC850, // from Google specification
-        'd M Y H:i:s T' // from Google examples
-    ];
-
     private $strict = false;
 
     private $url = '';
@@ -61,13 +53,10 @@ class XRobotsTagParser
      *
      * @param string $url
      * @param string $userAgent
-     * @param bool $strict
      * @param array|null $headers
      */
-    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, $strict = false, $headers = null)
+    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, $headers = null)
     {
-        $this->strict = $strict;
-
         // Parse URL
         $urlParser = new URLParser(trim($url));
         if (!$urlParser->isValid()) {
@@ -174,35 +163,8 @@ class XRobotsTagParser
         if (!isset($this->rules[$this->currentUserAgent])) {
             $this->rules[$this->currentUserAgent] = [];
         }
-        switch ($this->currentDirective) {
-            case self::DIRECTIVE_ALL:
-                if (!$this->strict) break;
-                $this->rules[$this->currentUserAgent][self::DIRECTIVE_ALL] = true;
-                break;
-            case self::DIRECTIVE_NONE:
-                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NONE] = true;
-                if ($this->strict) break;
-                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
-                $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_FOLLOW] = true;
-                break;
-            case self::DIRECTIVE_UNAVAILABLE_AFTER:
-                if ($this->strict) $this->supportedDateFormats = [self::DATE_FORMAT_DEFAULT];
-                foreach (array_unique($this->supportedDateFormats) as $format) {
-                    $dateTime = date_create_from_format($format, $this->currentValue);
-                    if ($dateTime === false) continue;
-                    $this->rules[$this->currentUserAgent][self::DIRECTIVE_UNAVAILABLE_AFTER] = $dateTime->format(DATE_RFC850);
-                    if ($this->strict) break;
-                    if (time() >= $dateTime->getTimestamp()) {
-                        $this->rules[$this->currentUserAgent][self::DIRECTIVE_NO_INDEX] = true;
-                    }
-                    break;
-                }
-                break;
-            default:
-                $directive = new directive($this->currentDirective, $this->currentValue);
-                print_r($directive->getArray());
-                $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], $directive->getArray());
-        }
+        $directive = new directive($this->currentDirective, $this->currentValue);
+        $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], $directive->getArray());
     }
 
     /**

@@ -3,12 +3,13 @@
 namespace vipnytt\XRobotsTagParser\directives;
 
 
-final class nofollow implements directiveInterface
+final class all implements directiveInterface
 {
-    const DIRECTIVE = 'nofollow';
+    const DIRECTIVE = 'all';
 
     public function __construct($value = null)
     {
+
     }
 
     public function getDirective()

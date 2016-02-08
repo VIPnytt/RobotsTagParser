@@ -17,7 +17,7 @@ class MultiTest extends \PHPUnit_Framework_TestCase
      */
     public function testMultipleDirectives($url, $bot, $strict, $headers)
     {
-        $parser = new XRobotsTagParser($url, $bot, $strict, $headers);
+        $parser = new XRobotsTagParser($url, $bot, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertTrue($parser->getRules()['noindex']);

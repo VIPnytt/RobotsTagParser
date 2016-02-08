@@ -18,7 +18,7 @@ class UnavailableAfterStrictTest extends \PHPUnit_Framework_TestCase
      */
     public function testUnavailableAfterStrict($url, $bot, $strict, $headers)
     {
-        $parser = new XRobotsTagParser($url, $bot, $strict, $headers);
+        $parser = new XRobotsTagParser($url, $bot, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         // TODO: Disabled due to an RFC-850 parsing bug
