@@ -171,6 +171,9 @@ class XRobotsTagParser
      */
     private function addRule()
     {
+        if (!isset($this->rules[$this->currentUserAgent])) {
+            $this->rules[$this->currentUserAgent] = [];
+        }
         switch ($this->currentDirective) {
             case self::DIRECTIVE_ALL:
                 if (!$this->strict) break;
@@ -197,7 +200,8 @@ class XRobotsTagParser
                 break;
             default:
                 $directive = new directive($this->currentDirective, $this->currentValue);
-                $this->rules[$this->currentUserAgent][$this->currentDirective] = $directive->getValue();
+                print_r($directive->getArray());
+                $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], $directive->getArray());
         }
     }
 

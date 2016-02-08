@@ -7,5 +7,5 @@ interface directiveInterface
 {
     public function __construct($value = null);
 
-    public function getValue();
+    public function getArray();
 }

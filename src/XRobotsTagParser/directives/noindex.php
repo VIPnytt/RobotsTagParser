@@ -5,12 +5,15 @@ namespace vipnytt\XRobotsTagParser\directives;
 
 final class noindex implements directiveInterface
 {
+    const DIRECTIVE = 'noindex';
+
     public function __construct($value = null)
     {
+
     }
 
-    public function getValue()
+    public function getArray()
     {
-        return true;
+        return [self::DIRECTIVE => true];
     }
 }

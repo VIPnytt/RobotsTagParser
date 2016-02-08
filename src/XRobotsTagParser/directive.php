@@ -22,8 +22,8 @@ final class directive
         $this->object = $object;
     }
 
-    public function getValue()
+    public function getArray()
     {
-        return $this->object->getValue();
+        return $this->object->getArray();
     }
 }

@@ -5,12 +5,14 @@ namespace vipnytt\XRobotsTagParser\directives;
 
 final class noarchive implements directiveInterface
 {
+    const DIRECTIVE = 'noarchive';
+
     public function __construct($value = null)
     {
     }
 
-    public function getValue()
+    public function getArray()
     {
-        return true;
+        return [self::DIRECTIVE => true];
     }
 }

@@ -5,12 +5,14 @@ namespace vipnytt\XRobotsTagParser\directives;
 
 final class noodp implements directiveInterface
 {
+    const DIRECTIVE = 'noodp';
+
     public function __construct($value = null)
     {
     }
 
-    public function getValue()
+    public function getArray()
     {
-        return true;
+        return [self::DIRECTIVE => true];
     }
 }
