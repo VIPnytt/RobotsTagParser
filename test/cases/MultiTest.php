@@ -12,12 +12,11 @@ class MultiTest extends \PHPUnit_Framework_TestCase
      * @dataProvider generateDataForTest
      * @param string $url
      * @param string $bot
-     * @param bool $strict
-     * @param array|null $headers
+     * @param array $options
      */
-    public function testMultipleDirectives($url, $bot, $strict, $headers)
+    public function testMultipleDirectives($url, $bot, $options)
     {
-        $parser = new XRobotsTagParser($url, $bot, $headers);
+        $parser = new XRobotsTagParser($url, $bot, $options);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertTrue($parser->getRules()['noindex']);
@@ -59,21 +58,22 @@ class MultiTest extends \PHPUnit_Framework_TestCase
             [
                 'http://example.com/',
                 'googlebot',
-                false,
-                [
-                    'HTTP/1.1 200 OK',
-                    'Date: Tue, 25 May 2010 21:42:43 GMT',
-                    'X-Robots-Tag: all',
-                    'X-Robots-Tag: noindex',
-                    'X-Robots-Tag: nofollow',
-                    'X-Robots-Tag: none',
-                    'X-Robots-Tag: noarchive',
-                    'X-Robots-Tag: nosnippet',
-                    'X-Robots-Tag: noodp',
-                    'X-Robots-Tag: notranslate',
-                    'X-Robots-Tag: noimageindex',
-                    'X-Robots-Tag: unavailable_after: 25 Jun 2010 15:00:00 PST',
-                    'X-Robots-Tag: googlebot: all, none, nofollow,nosnippet,notranslate, unavailable_after: 25 Jun 2010 15:00:00 PST, noindex, noarchive, noodp,noimageindex'
+                ['headers' =>
+                    [
+                        'HTTP/1.1 200 OK',
+                        'Date: Tue, 25 May 2010 21:42:43 GMT',
+                        'X-Robots-Tag: all',
+                        'X-Robots-Tag: noindex',
+                        'X-Robots-Tag: nofollow',
+                        'X-Robots-Tag: none',
+                        'X-Robots-Tag: noarchive',
+                        'X-Robots-Tag: nosnippet',
+                        'X-Robots-Tag: noodp',
+                        'X-Robots-Tag: notranslate',
+                        'X-Robots-Tag: noimageindex',
+                        'X-Robots-Tag: unavailable_after: 25 Jun 2010 15:00:00 PST',
+                        'X-Robots-Tag: googlebot: all, none, nofollow,nosnippet,notranslate, unavailable_after: 25 Jun 2010 15:00:00 PST, noindex, noarchive, noodp,noimageindex'
+                    ]
                 ]
             ]
         ];

@@ -12,12 +12,11 @@ class NoneTest extends \PHPUnit_Framework_TestCase
      * @dataProvider generateDataForTest
      * @param string $url
      * @param string $bot
-     * @param bool $strict
-     * @param array|null $headers
+     * @param array $options
      */
-    public function testNone($url, $bot, $strict, $headers)
+    public function testNone($url, $bot, $options)
     {
-        $parser = new XRobotsTagParser($url, $bot, $headers);
+        $parser = new XRobotsTagParser($url, $bot, $options);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertTrue($parser->getRules()['none']);
@@ -43,10 +42,11 @@ class NoneTest extends \PHPUnit_Framework_TestCase
             [
                 'http://example.com/',
                 'googlebot',
-                false,
-                [
-                    'X-Robots-Tag: none',
-                    'X-Robots-Tag: googlebot: none'
+                ['headers' =>
+                    [
+                        'X-Robots-Tag: none',
+                        'X-Robots-Tag: googlebot: none'
+                    ]
                 ]
             ]
         ];

@@ -35,8 +35,6 @@ class XRobotsTagParser
     const DIRECTIVE_NO_TRANSLATE = 'notranslate';
     const DIRECTIVE_UNAVAILABLE_AFTER = 'unavailable_after';
 
-    private $strict = false;
-
     private $url = '';
     private $userAgent = self::USERAGENT_DEFAULT;
 
@@ -46,6 +44,7 @@ class XRobotsTagParser
     private $currentDirective = '';
     private $currentValue = '';
 
+    private $options = [];
     private $rules = [];
 
     /**
@@ -53,18 +52,21 @@ class XRobotsTagParser
      *
      * @param string $url
      * @param string $userAgent
-     * @param array|null $headers
+     * @param array $options
      */
-    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, $headers = null)
+    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, $options = [])
     {
         // Parse URL
         $urlParser = new URLParser(trim($url));
         if (!$urlParser->isValid()) {
             trigger_error('Invalid URL', E_USER_WARNING);
         }
+        // Encode URL
         $this->url = $urlParser->encode();
+        // Set any optional options
+        $this->options = $options;
         // Get headers
-        $this->useHeaders($headers);
+        $this->getHeaders();
         // Parse rules
         $this->parse();
         // Set User-Agent
@@ -75,18 +77,19 @@ class XRobotsTagParser
     /**
      * Request HTTP headers
      *
-     * @param array|null|false $customHeaders - use these headers
      * @return bool
      */
-    private function useHeaders($customHeaders = null)
+    private function getHeaders()
     {
-        if ($customHeaders === false) {
+        if (isset($this->options['headers'])) {
+            $this->headers = $this->options['headers'];
+            return true;
+        }
+        $this->headers = get_headers($this->url);
+        if ($this->headers === false) {
             trigger_error('Unable to fetch HTTP headers', E_USER_ERROR);
             return false;
-        } elseif (!is_array($customHeaders) || empty($customHeaders)) {
-            return $this->useHeaders(get_headers($this->url));
         }
-        $this->headers = $customHeaders;
         return true;
     }
 
@@ -163,7 +166,7 @@ class XRobotsTagParser
         if (!isset($this->rules[$this->currentUserAgent])) {
             $this->rules[$this->currentUserAgent] = [];
         }
-        $directive = new directive($this->currentDirective, $this->currentValue);
+        $directive = new directive($this->currentDirective, $this->currentValue, $this->options);
         $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], $directive->getArray());
     }
 
