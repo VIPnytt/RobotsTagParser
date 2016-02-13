@@ -1,6 +1,8 @@
 [![Build Status](https://travis-ci.org/VIPnytt/X-Robots-Tag-parser.svg?branch=master)](https://travis-ci.org/VIPnytt/X-Robots-Tag-parser) [![Code Climate](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser/badges/gpa.svg)](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser) [![Test Coverage](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser/badges/coverage.svg)](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser/coverage) [![License](https://poser.pugx.org/VIPnytt/X-Robots-Tag-parser/license)](https://packagist.org/packages/VIPnytt/X-Robots-Tag-parser) [![Join the chat at https://gitter.im/VIPnytt/X-Robots-Tag-parser](https://badges.gitter.im/VIPnytt/X-Robots-Tag-parser.svg)](https://gitter.im/VIPnytt/X-Robots-Tag-parser)
 
 # X-Robots-Tag HTTP header parser class
+
+[![Join the chat at https://gitter.im/VIPnytt/X-Robots-Tag-parser](https://badges.gitter.im/VIPnytt/X-Robots-Tag-parser.svg)](https://gitter.im/VIPnytt/X-Robots-Tag-parser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 PHP class to parse X-Robots-Tag HTTP headers according to [Google X-Robots-Tag HTTP header specifications](https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#using-the-x-robots-tag-http-header).
 
 ## Installation
