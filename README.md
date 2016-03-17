@@ -40,6 +40,4 @@ You can find out more about Composer here: https://getcomposer.org/
 - [x] ````noodp```` - Do not use metadata from the Open Directory project for titles or snippets shown for this page.
 - [x] ````notranslate```` - Do not offer translation of this page in search results.
 - [x] ````noimageindex```` - Do not index images on this page.
-
-### Unsupported (work in progress):
-- [ ] ````unavailable_after: [RFC-850 date/time]```` -Do not show this page in search results after the specified date/time.
+- [x] ````unavailable_after: [RFC-850 date/time]```` -Do not show this page in search results after the specified date/time.

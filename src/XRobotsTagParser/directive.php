@@ -27,7 +27,6 @@ final class directive
             trigger_error('Directive class invalid', E_USER_ERROR);
         }
         $this->object = $object;
-        return $this->object;
     }
 
     /**

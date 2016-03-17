@@ -7,13 +7,10 @@ final class unavailable_after implements directiveInterface
 {
     const DIRECTIVE = 'unavailable_after';
 
-    const DATE_DEFAULT = 'd M Y H:i:s T';
-    const DATE_RFC850 = DATE_RFC850;
     const DATE_GOOGLE = 'd M Y H:i:s T';
 
     private $supportedDateFormats = [
-        self::DATE_DEFAULT,
-        self::DATE_RFC850,
+        DATE_RFC850,
         self::DATE_GOOGLE
     ];
 
@@ -62,15 +59,16 @@ final class unavailable_after implements directiveInterface
      */
     public function getArray()
     {
-        foreach (array_unique($this->supportedDateFormats) as $format) {
-            $dateTime = date_create_from_format($format, $this->value);
-            if ($dateTime === false) continue;
-            $result[self::DIRECTIVE] = $dateTime->format(DATE_RFC850);
-            if (time() >= $dateTime->getTimestamp()) {
-                $noindex = new noindex(str_ireplace(self::DIRECTIVE, 'noindex', $this->value));
-                $result[$noindex->getDirective()] = $noindex->getValue();
+        $result = [];
+        $string = trim(substr($this->value, mb_stripos($this->value, self::DIRECTIVE) + mb_strlen(self::DIRECTIVE) + 1));
+        while (mb_strlen($string) > 0) {
+            foreach ($this->supportedDateFormats as $format) {
+                $dateTime = date_create_from_format($format, $string);
+                if ($dateTime === false) continue;
+                $result[self::DIRECTIVE] = $dateTime->format(DATE_RFC850);
+                return $result;
             }
-            return $result;
+            $string = trim(mb_substr($string, 0, -1));
         }
         return [];
     }

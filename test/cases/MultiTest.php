@@ -19,6 +19,10 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($url, $bot, $options);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
+        $this->assertTrue($parser->getRules()['all']);
+        $this->assertTrue($parser->export()['']['all']);
+        $this->assertTrue($parser->export()['googlebot']['all']);
+
         $this->assertTrue($parser->getRules()['noindex']);
         $this->assertTrue($parser->export()['']['noindex']);
         $this->assertTrue($parser->export()['googlebot']['noindex']);
@@ -26,6 +30,10 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($parser->getRules()['nofollow']);
         $this->assertTrue($parser->export()['']['nofollow']);
         $this->assertTrue($parser->export()['googlebot']['nofollow']);
+
+        $this->assertTrue($parser->getRules()['none']);
+        $this->assertTrue($parser->export()['']['none']);
+        $this->assertTrue($parser->export()['googlebot']['none']);
 
         $this->assertTrue($parser->getRules()['noarchive']);
         $this->assertTrue($parser->export()['']['noarchive']);
@@ -71,8 +79,8 @@ class MultiTest extends \PHPUnit_Framework_TestCase
                         'X-Robots-Tag: noodp',
                         'X-Robots-Tag: notranslate',
                         'X-Robots-Tag: noimageindex',
-                        'X-Robots-Tag: unavailable_after: 25 Jun 2010 15:00:00 PST',
-                        'X-Robots-Tag: googlebot: all, none, nofollow,nosnippet,notranslate, unavailable_after: 25 Jun 2010 15:00:00 PST, noindex, noarchive, noodp,noimageindex'
+                        'X-Robots-Tag: unavailable_after: Friday, 25 Jun 2010 15:00:00 PST',
+                        'X-Robots-Tag: googlebot: all, none, nofollow,nosnippet,notranslate, unavailable_after: Friday, 25 Jun 2010 15:00:00 PST, noindex, noarchive, noodp,noimageindex'
                     ]
                 ]
             ]

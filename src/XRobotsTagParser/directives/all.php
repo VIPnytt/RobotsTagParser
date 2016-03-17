@@ -7,8 +7,6 @@ final class all implements directiveInterface
 {
     const DIRECTIVE = 'all';
 
-    private $strict = false;
-
     /**
      * Constructor
      *
@@ -41,10 +39,7 @@ final class all implements directiveInterface
      */
     public function getArray()
     {
-        if ($this->strict) {
-            return [self::DIRECTIVE => $this->getValue()];
-        }
-        return [];
+        return [self::DIRECTIVE => $this->getValue()];
     }
 
     /**

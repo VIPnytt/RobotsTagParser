@@ -42,7 +42,6 @@ class XRobotsTagParser
     private $currentRule = '';
     private $currentUserAgent = self::USERAGENT_DEFAULT;
     private $currentDirective = '';
-    private $currentValue = '';
 
     private $options = [];
     private $rules = [];
@@ -101,12 +100,12 @@ class XRobotsTagParser
     private function parse()
     {
         foreach ($this->headers as $header) {
-            $parts = explode(':', mb_strtolower($header), 2);
+            $parts = array_map('trim', explode(':', mb_strtolower($header), 2));
             if (count($parts) < 2 || $parts[0] != self::HEADER_RULE_IDENTIFIER) {
                 // Header is not a rule
                 continue;
             }
-            $this->currentRule = trim($parts[1]);
+            $this->currentRule = $parts[1];
             $this->detectDirectives();
         }
 
@@ -119,16 +118,16 @@ class XRobotsTagParser
      */
     private function detectDirectives()
     {
-        $rules = explode(',', $this->currentRule);
-        foreach ($rules as $rule) {
-            $pair = array_map('trim', explode(':', $rule, 2));
-            if ($rules[0] === $rule && count($pair) == 2 && !in_array($pair[0], $this->directiveArray())) {
-                $this->currentUserAgent = $pair[0];
-                $pair = array_map('trim', explode(':', $pair[1], 2));
-            }
-            if (in_array($pair[0], $this->directiveArray())) {
-                $this->currentDirective = $pair[0];
-                $this->currentValue = isset($pair[1]) ? $pair[1] : '';
+        $directives = array_map('trim', explode(',', $this->currentRule));
+        $pair = array_map('trim', explode(':', $directives[0], 2));
+        if (count($pair) == 2 && !in_array($pair[0], $this->directiveArray())) {
+            $this->currentUserAgent = $pair[0];
+            $directives[0] = $pair[1];
+        }
+        foreach ($directives as $rule) {
+            $directive = trim(explode(':', $rule, 2)[0]);
+            if (in_array($directive, $this->directiveArray())) {
+                $this->currentDirective = $directive;
                 $this->addRule();
             }
         }
@@ -166,7 +165,7 @@ class XRobotsTagParser
         if (!isset($this->rules[$this->currentUserAgent])) {
             $this->rules[$this->currentUserAgent] = [];
         }
-        $directive = new directive($this->currentDirective, $this->currentValue, $this->options);
+        $directive = new directive($this->currentDirective, $this->currentRule, $this->options);
         $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], $directive->getArray());
     }
 
@@ -180,7 +179,6 @@ class XRobotsTagParser
         $this->currentRule = '';
         $this->currentUserAgent = self::USERAGENT_DEFAULT;
         $this->currentDirective = '';
-        $this->currentValue = '';
     }
 
     /**

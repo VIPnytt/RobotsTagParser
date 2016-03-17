@@ -7,10 +7,6 @@ final class none implements directiveInterface
 {
     const DIRECTIVE = 'none';
 
-    private $value;
-
-    private $strict = false;
-
     /**
      * Constructor
      *
@@ -19,9 +15,9 @@ final class none implements directiveInterface
      */
     public function __construct($value, $options = [])
     {
-        foreach ($options as $key => $rule) {
+        foreach ($options as $key => $value) {
             if (isset($this->$key)) {
-                $this->$key = $rule;
+                $this->$key = $value;
             }
         }
     }
@@ -44,12 +40,6 @@ final class none implements directiveInterface
     public function getArray()
     {
         $result = [self::DIRECTIVE => $this->getValue()];
-        if (!$this->strict) {
-            $noindex = new noindex(str_ireplace(self::DIRECTIVE, 'noindex', $this->value));
-            $result[$noindex->getDirective()] = $noindex->getValue();
-            $nofollow = new nofollow(str_ireplace(self::DIRECTIVE, 'nofollow', $this->value));
-            $result[$nofollow->getDirective()] = $nofollow->getValue();
-        }
         return $result;
     }
 
