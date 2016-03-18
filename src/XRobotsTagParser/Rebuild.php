@@ -5,7 +5,6 @@ namespace vipnytt\XRobotsTagParser;
 final class Rebuild
 {
     private $directiveArray;
-    private $reRun = true;
 
     /**
      * Constructor
@@ -15,8 +14,19 @@ final class Rebuild
     public function __construct($directives)
     {
         $this->directiveArray = $directives;
-        while ($this->reRun) {
-            $this->reRun = false;
+        $this->parse();
+    }
+
+    /**
+     * parse
+     *
+     * @return void
+     */
+    private function parse()
+    {
+        $past = [];
+        while ($past !== $this->directiveArray) {
+            $past = $this->directiveArray;
             $this->all();
             $this->noindex();
             $this->none();
@@ -48,7 +58,6 @@ final class Rebuild
             return;
         }
         $this->directiveArray['noarchive'] = true;
-        $this->reRun = true;
     }
 
     /**
@@ -63,7 +72,6 @@ final class Rebuild
         }
         $this->directiveArray['noindex'] = true;
         $this->directiveArray['nofollow'] = true;
-        $this->reRun = true;
     }
 
     /**
@@ -73,14 +81,13 @@ final class Rebuild
      */
     private function unavailable_after()
     {
-        if (
-            !isset($this->directiveArray['unavailable_after'])
-            || time() < date_create_from_format(DATE_RFC850, $this->directiveArray['unavailable_after'])
-        ) {
+        if (!isset($this->directiveArray['unavailable_after'])) {
             return;
         }
-        $this->directiveArray['noindex'] = true;
-        $this->reRun = true;
+        $dateTime = date_create_from_format(DATE_RFC850, $this->directiveArray['unavailable_after']);
+        if ($dateTime !== false && time() >= $dateTime->getTimestamp()) {
+            $this->directiveArray['noindex'] = true;
+        }
     }
 
     /**
