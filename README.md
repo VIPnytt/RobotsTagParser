@@ -27,17 +27,25 @@ You can find out more about Composer here: https://getcomposer.org/
 
 
 ## Usage
-Fetch headers automatically:
+Get rules for a specific UserAgent:
 ```php
 $parser = new \vipnytt\XRobotsTagParser('http://example.com/', 'myUserAgent');
-$rules = $parser->getRules();
+$array = $parser->getRules();
 ```
 
-Export all rules:
+Use existing headers:
 ```php
-$parser = new \vipnytt\XRobotsTagParser('http://example.com/');
-$rules = $parser->export();
+$parser = new \vipnytt\XRobotsTagParser('http://example.com/', 'myUserAgent', ['headers' => $headers]);
+$array = $parser->getRules();
 ```
+
+Export rules for all UserAgents:
+```php
+$parser = new \vipnytt\XRobotsTagParser('http://example.com/', 'myUserAgent');
+$array = $parser->export();
+```
+
+
 
 ## Directives
 - [x] ````all```` - There are no restrictions for indexing or serving.
