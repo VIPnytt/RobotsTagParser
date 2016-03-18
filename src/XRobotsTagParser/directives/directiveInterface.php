@@ -26,11 +26,4 @@ interface directiveInterface
      * @return bool|string|null
      */
     public function getValue();
-
-    /**
-     * Get rule array
-     *
-     * @return array
-     */
-    public function getArray();
 }

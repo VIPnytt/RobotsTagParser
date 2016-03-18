@@ -33,16 +33,6 @@ final class notranslate implements directiveInterface
     }
 
     /**
-     * Get rule array
-     *
-     * @return array
-     */
-    public function getArray()
-    {
-        return [self::DIRECTIVE => $this->getValue()];
-    }
-
-    /**
      * Get value
      *
      * @return bool|string|null

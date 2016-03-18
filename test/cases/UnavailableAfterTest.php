@@ -7,8 +7,7 @@ use vipnytt\XRobotsTagParser;
 class UnavailableAfterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Directive: UNAVAILABLE_AFTER
-     * Strict: OFF
+     * unavailable_after test
      *
      * @dataProvider generateDataForTest
      * @param string $url
@@ -20,7 +19,8 @@ class UnavailableAfterTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($url, $bot, $options);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->getRules());
+        $this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->getRules(true));
+        $this->assertTrue($parser->getRules(false)['noindex']);
         $this->assertEquals(['unavailable_after' => 'Tuesday, 31-Dec-30 23:00:00 PST'], $parser->export()['']);
         $this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->export()['googlebot']);
     }

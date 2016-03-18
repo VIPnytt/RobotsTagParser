@@ -16,6 +16,7 @@
 namespace vipnytt;
 
 use vipnytt\XRobotsTagParser\directive;
+use vipnytt\XRobotsTagParser\Rebuild;
 use vipnytt\XRobotsTagParser\URLParser;
 use vipnytt\XRobotsTagParser\UserAgentParser;
 
@@ -184,9 +185,10 @@ class XRobotsTagParser
     /**
      * Return all applicable rules
      *
+     * @param bool $raw
      * @return array
      */
-    public function getRules()
+    public function getRules($raw = false)
     {
         $rules = [];
         // Default UserAgent
@@ -196,6 +198,10 @@ class XRobotsTagParser
         // Matching UserAgent
         if (isset($this->rules[$this->userAgent])) {
             $rules = array_merge($rules, $this->rules[$this->userAgent]);
+        }
+        if (!$raw) {
+            $rebuild = new Rebuild($rules);
+            $rules = $rebuild->getResult();
         }
         // Result
         return $rules;

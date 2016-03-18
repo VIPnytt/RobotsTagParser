@@ -19,39 +19,39 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($url, $bot, $options);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertTrue($parser->getRules()['all']);
+        $this->assertTrue($parser->getRules(true)['all']);
         $this->assertTrue($parser->export()['']['all']);
         $this->assertTrue($parser->export()['googlebot']['all']);
 
-        $this->assertTrue($parser->getRules()['noindex']);
+        $this->assertTrue($parser->getRules(true)['noindex']);
         $this->assertTrue($parser->export()['']['noindex']);
         $this->assertTrue($parser->export()['googlebot']['noindex']);
 
-        $this->assertTrue($parser->getRules()['nofollow']);
+        $this->assertTrue($parser->getRules(true)['nofollow']);
         $this->assertTrue($parser->export()['']['nofollow']);
         $this->assertTrue($parser->export()['googlebot']['nofollow']);
 
-        $this->assertTrue($parser->getRules()['none']);
+        $this->assertTrue($parser->getRules(true)['none']);
         $this->assertTrue($parser->export()['']['none']);
         $this->assertTrue($parser->export()['googlebot']['none']);
 
-        $this->assertTrue($parser->getRules()['noarchive']);
+        $this->assertTrue($parser->getRules(true)['noarchive']);
         $this->assertTrue($parser->export()['']['noarchive']);
         $this->assertTrue($parser->export()['googlebot']['noarchive']);
 
-        $this->assertTrue($parser->getRules()['nosnippet']);
+        $this->assertTrue($parser->getRules(true)['nosnippet']);
         $this->assertTrue($parser->export()['']['nosnippet']);
         $this->assertTrue($parser->export()['googlebot']['nosnippet']);
 
-        $this->assertTrue($parser->getRules()['noodp']);
+        $this->assertTrue($parser->getRules(true)['noodp']);
         $this->assertTrue($parser->export()['']['noodp']);
         $this->assertTrue($parser->export()['googlebot']['noodp']);
 
-        $this->assertTrue($parser->getRules()['notranslate']);
+        $this->assertTrue($parser->getRules(true)['notranslate']);
         $this->assertTrue($parser->export()['']['notranslate']);
         $this->assertTrue($parser->export()['googlebot']['notranslate']);
 
-        $this->assertTrue($parser->getRules()['noimageindex']);
+        $this->assertTrue($parser->getRules(true)['noimageindex']);
         $this->assertTrue($parser->export()['']['noimageindex']);
         $this->assertTrue($parser->export()['googlebot']['noimageindex']);
     }

@@ -45,32 +45,20 @@ final class unavailable_after implements directiveInterface
     /**
      * Get value
      *
-     * @return bool|string|null
+     * @return string|null
      */
     public function getValue()
     {
-        return $this->getArray()[self::DIRECTIVE];
-    }
-
-    /**
-     * Get rule array
-     *
-     * @return array
-     */
-    public function getArray()
-    {
-        $result = [];
-        $string = trim(substr($this->value, mb_stripos($this->value, self::DIRECTIVE) + mb_strlen(self::DIRECTIVE) + 1));
-        while (mb_strlen($string) > 0) {
+        $parts = explode(',', trim(substr($this->value, mb_stripos($this->value, self::DIRECTIVE) + mb_strlen(self::DIRECTIVE) + 1)));
+        for ($i = 1; $i <= count($parts); $i++) {
             foreach ($this->supportedDateFormats as $format) {
-                $dateTime = date_create_from_format($format, $string);
-                if ($dateTime === false) continue;
-                $result[self::DIRECTIVE] = $dateTime->format(DATE_RFC850);
-                return $result;
+                $dateTime = date_create_from_format($format, trim(implode(',', array_slice($parts, 0, $i))));
+                if ($dateTime !== false) {
+                    return $dateTime->format(DATE_RFC850);
+                }
             }
-            $string = trim(mb_substr($string, 0, -1));
         }
-        return [];
+        return null;
     }
 }
 

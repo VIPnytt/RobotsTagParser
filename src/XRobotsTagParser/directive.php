@@ -36,6 +36,18 @@ final class directive
      */
     public function getArray()
     {
-        return $this->object->getArray();
+        return [
+            $this->object->getDirective() => $this->object->getValue()
+        ];
+    }
+
+    /**
+     * Get rule value
+     *
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->object->getValue();
     }
 }

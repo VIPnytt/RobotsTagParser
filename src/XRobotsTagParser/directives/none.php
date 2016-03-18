@@ -33,17 +33,6 @@ final class none implements directiveInterface
     }
 
     /**
-     * Get rule array
-     *
-     * @return array
-     */
-    public function getArray()
-    {
-        $result = [self::DIRECTIVE => $this->getValue()];
-        return $result;
-    }
-
-    /**
      * Get value
      *
      * @return bool|string|null
