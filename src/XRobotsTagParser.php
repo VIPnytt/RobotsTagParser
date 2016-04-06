@@ -176,7 +176,7 @@ class XRobotsTagParser
         if (!isset($this->rules[$this->currentUserAgent])) {
             $this->rules[$this->currentUserAgent] = [];
         }
-        $class = "XRobotsTagParser\\directives\\$directive";
+        $class = __NAMESPACE__ . "XRobotsTagParser\\directives\\$directive";
         $object = new $class($this->currentRule);
         if (!$object instanceof XRobotsTagParser\directives\directiveInterface) {
             throw new XRobotsTagParserException('Unsupported directive class');
