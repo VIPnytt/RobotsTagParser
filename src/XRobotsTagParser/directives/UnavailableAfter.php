@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class UnavailableAfter implements directiveInterface
 {
     const DIRECTIVE = 'unavailable_after';
+    const MEANING = 'Do not show this page in search results after the specified date/time.';
 
     const DATE_GOOGLE = 'd M Y H:i:s T';
 
@@ -52,6 +53,16 @@ final class UnavailableAfter implements directiveInterface
             }
         }
         return null;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }
 

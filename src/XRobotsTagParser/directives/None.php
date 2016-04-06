@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class None implements directiveInterface
 {
     const DIRECTIVE = 'none';
+    const MEANING = 'Equivalent to `noindex` and `nofollow`.';
 
     /**
      * Constructor
@@ -33,5 +34,15 @@ final class None implements directiveInterface
     public function getValue()
     {
         return true;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }

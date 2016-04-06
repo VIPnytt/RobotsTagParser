@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class NoImageIndex implements directiveInterface
 {
     const DIRECTIVE = 'noimageindex';
+    const MEANING = 'Do not index images on this page.';
 
     /**
      * Constructor
@@ -33,5 +34,15 @@ final class NoImageIndex implements directiveInterface
     public function getValue()
     {
         return true;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }

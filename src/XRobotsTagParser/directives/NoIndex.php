@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class NoIndex implements directiveInterface
 {
     const DIRECTIVE = 'noindex';
+    const MEANING = 'Do not show this page in search results and do not show a `Cached` link in search results.';
 
     /**
      * Constructor
@@ -33,5 +34,15 @@ final class NoIndex implements directiveInterface
     public function getValue()
     {
         return true;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }

@@ -45,7 +45,6 @@ class XRobotsTagParser
     protected $currentRule = '';
     protected $currentUserAgent = self::USERAGENT_DEFAULT;
 
-    protected $options = [];
     protected $rules = [];
 
     /**
@@ -53,10 +52,10 @@ class XRobotsTagParser
      *
      * @param string $url
      * @param string $userAgent
-     * @param array $options
+     * @param array $config
      * @throws XRobotsTagParserException
      */
-    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, array $options = [])
+    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, array $config = [])
     {
         // Parse URL
         $urlParser = new URLParser(trim($url));
@@ -65,8 +64,8 @@ class XRobotsTagParser
         }
         // Encode URL
         $this->url = $urlParser->encode();
-        // Set any optional options
-        $this->options = $options;
+        // Set any optional configuration options
+        $this->config = $config;
         if (isset($this->config['headers']) && is_array($this->config['headers'])) {
             $this->headers = $this->config['headers'];
         }
@@ -229,5 +228,25 @@ class XRobotsTagParser
     public function export()
     {
         return $this->rules;
+    }
+
+    /**
+     * Get the meaning of an Directive
+     *
+     * @param string $directive
+     * @return string
+     * @throws XRobotsTagParserException
+     */
+    public function getDirectiveMeaning($directive)
+    {
+        if (!in_array($directive, array_keys($this->directiveClasses()))) {
+            throw new XRobotsTagParserException('Unknown directive');
+        }
+        $class = "XRobotsTagParser\\directives\\$directive";
+        $object = new $class($directive);
+        if (!$object instanceof XRobotsTagParser\directives\directiveInterface) {
+            throw new XRobotsTagParserException('Unsupported directive class');
+        }
+        return $object->getMeaning();
     }
 }

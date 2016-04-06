@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class NoTranslate implements directiveInterface
 {
     const DIRECTIVE = 'notranslate';
+    const MEANING = 'Do not offer translation of this page in search results.';
 
     /**
      * Constructor
@@ -33,5 +34,15 @@ final class NoTranslate implements directiveInterface
     public function getValue()
     {
         return true;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }

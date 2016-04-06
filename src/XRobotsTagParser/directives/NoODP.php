@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class NoODP implements directiveInterface
 {
     const DIRECTIVE = 'noodp';
+    const MEANING = 'Do not use metadata from the `Open Directory project` (http://dmoz.org/) for titles or snippets shown for this page.';
 
     /**
      * Constructor
@@ -33,5 +34,15 @@ final class NoODP implements directiveInterface
     public function getValue()
     {
         return true;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }

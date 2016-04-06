@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class NoFollow implements directiveInterface
 {
     const DIRECTIVE = 'nofollow';
+    const MEANING = 'Do not follow the links on this page.';
 
     /**
      * Constructor
@@ -33,5 +34,15 @@ final class NoFollow implements directiveInterface
     public function getValue()
     {
         return true;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }

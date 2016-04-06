@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class NoArchive implements directiveInterface
 {
     const DIRECTIVE = 'noarchive';
+    const MEANING = 'Do not show a `Cached` link in search results.';
 
     /**
      * Constructor
@@ -33,5 +34,15 @@ final class NoArchive implements directiveInterface
     public function getValue()
     {
         return true;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }

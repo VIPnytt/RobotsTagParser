@@ -55,7 +55,7 @@ $array = $parser->export();
 
 
 
-## Directives
+## Supported directives
 - [x] ````all```` - There are no restrictions for indexing or serving.
 - [x] ````none```` - Equivalent to ````noindex````, ````nofollow````
 - [x] ````noindex```` - Do not show this page in search results and do not show a "Cached" link in search results.

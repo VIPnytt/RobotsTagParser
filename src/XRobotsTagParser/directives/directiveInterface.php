@@ -23,4 +23,11 @@ interface directiveInterface
      * @return bool|string|null
      */
     public function getValue();
+
+    /**
+     * Get meaning
+     *
+     * @return string
+     */
+    public function getMeaning();
 }

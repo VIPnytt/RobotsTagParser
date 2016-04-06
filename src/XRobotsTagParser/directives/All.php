@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class All implements directiveInterface
 {
     const DIRECTIVE = 'all';
+    const MEANING = 'There are no restrictions for indexing or serving. Note: this directive is the default value and has no effect if explicitly listed.';
 
     /**
      * Constructor
@@ -33,5 +34,15 @@ final class All implements directiveInterface
     public function getValue()
     {
         return true;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }

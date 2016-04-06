@@ -4,6 +4,7 @@ namespace vipnytt\XRobotsTagParser\directives;
 final class NoSnippet implements directiveInterface
 {
     const DIRECTIVE = 'nosnippet';
+    const MEANING = 'Do not show a snippet in the search results for this page.';
 
     /**
      * Constructor
@@ -33,5 +34,15 @@ final class NoSnippet implements directiveInterface
     public function getValue()
     {
         return true;
+    }
+
+    /**
+     * Get directive meaning
+     *
+     * @return string
+     */
+    public function getMeaning()
+    {
+        return self::MEANING;
     }
 }
