@@ -1,5 +1,4 @@
 <?php
-
 namespace vipnytt\XRobotsTagParser;
 
 final class Rebuild

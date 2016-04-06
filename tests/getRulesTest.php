@@ -3,24 +3,24 @@ namespace vipnytt\XRobotsTagParser\Tests;
 
 use vipnytt\XRobotsTagParser;
 
-class NoneTest extends \PHPUnit_Framework_TestCase
+class GetRulesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * none test
+     * Get rules
      *
      * @dataProvider generateDataForTest
      * @param string $url
      * @param string $bot
      * @param array $options
      */
-    public function testNone($url, $bot, $options)
+    public function testGetRules($url, $bot, $options)
     {
         $parser = new XRobotsTagParser($url, $bot, $options);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertTrue($parser->getRules(true)['none']);
-        $this->assertTrue($parser->getRules(false)['noindex']);
-        $this->assertTrue($parser->getRules(false)['nofollow']);
+        $this->assertTrue($parser->getRules(true)['noindex']);
+        $this->assertTrue($parser->getRules(true)['noarchive']);
+        $this->assertTrue($parser->getRules(true)['noodp']);
     }
 
     /**
@@ -35,7 +35,9 @@ class NoneTest extends \PHPUnit_Framework_TestCase
                 'googlebot',
                 ['headers' =>
                     [
-                        'X-Robots-Tag: none'
+                        'X-Robots-Tag: googlebot: noindex, noarchive',
+                        'X-Robots-Tag: bingbot: noindex, noodp',
+                        'X-Robots-Tag: noindex, noodp'
                     ]
                 ]
             ]

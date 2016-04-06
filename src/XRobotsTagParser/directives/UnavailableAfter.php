@@ -1,9 +1,7 @@
 <?php
-
 namespace vipnytt\XRobotsTagParser\directives;
 
-
-final class unavailable_after implements directiveInterface
+final class UnavailableAfter implements directiveInterface
 {
     const DIRECTIVE = 'unavailable_after';
 

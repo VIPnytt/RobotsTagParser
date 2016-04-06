@@ -1,9 +1,7 @@
 <?php
-
 namespace vipnytt\XRobotsTagParser\directives;
 
-
-final class none implements directiveInterface
+final class None implements directiveInterface
 {
     const DIRECTIVE = 'none';
 

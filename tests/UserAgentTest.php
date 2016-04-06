@@ -1,5 +1,4 @@
 <?php
-
 namespace vipnytt\robot\UserAgentParser\Tests;
 
 use vipnytt\XRobotsTagParser\UserAgentParser;

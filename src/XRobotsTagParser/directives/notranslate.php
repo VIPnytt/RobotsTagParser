@@ -1,9 +1,7 @@
 <?php
-
 namespace vipnytt\XRobotsTagParser\directives;
 
-
-final class notranslate implements directiveInterface
+final class NoTranslate implements directiveInterface
 {
     const DIRECTIVE = 'notranslate';
 

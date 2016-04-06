@@ -1,9 +1,7 @@
 <?php
-
 namespace vipnytt\XRobotsTagParser\directives;
 
-
-final class nosnippet implements directiveInterface
+final class NoSnippet implements directiveInterface
 {
     const DIRECTIVE = 'nosnippet';
 

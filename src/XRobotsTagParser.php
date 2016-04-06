@@ -1,4 +1,6 @@
 <?php
+namespace vipnytt;
+
 /**
  * X-Robots-Tag HTTP header parser class
  *
@@ -13,9 +15,6 @@
  * @link https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#using-the-x-robots-tag-http-header
  */
 
-namespace vipnytt;
-
-use vipnytt\XRobotsTagParser\directive;
 use vipnytt\XRobotsTagParser\Rebuild;
 use vipnytt\XRobotsTagParser\URLParser;
 use vipnytt\XRobotsTagParser\UserAgentParser;
@@ -42,7 +41,6 @@ class XRobotsTagParser
     private $headers = [];
     private $currentRule = '';
     private $currentUserAgent = self::USERAGENT_DEFAULT;
-    private $currentDirective = '';
 
     private $options = [];
     private $rules = [];
@@ -121,53 +119,57 @@ class XRobotsTagParser
     {
         $directives = array_map('trim', explode(',', $this->currentRule));
         $pair = array_map('trim', explode(':', $directives[0], 2));
-        if (count($pair) == 2 && !in_array($pair[0], $this->directiveArray())) {
+        if (count($pair) == 2 && !in_array($pair[0], array_keys($this->directiveClasses()))) {
             $this->currentUserAgent = $pair[0];
             $directives[0] = $pair[1];
         }
         foreach ($directives as $rule) {
             $directive = trim(explode(':', $rule, 2)[0]);
-            if (in_array($directive, $this->directiveArray())) {
-                $this->currentDirective = $directive;
-                $this->addRule();
+            if (in_array($directive, array_keys($this->directiveClasses()))) {
+                $this->addRule($this->directiveClasses()[$directive]);
             }
         }
         $this->cleanup();
     }
 
     /**
-     * Directives supported
+     * Array of directives and their class names
      *
      * @return array
      */
-    protected function directiveArray()
+    protected function directiveClasses()
     {
         return [
-            self::DIRECTIVE_ALL,
-            self::DIRECTIVE_NONE,
-            self::DIRECTIVE_NO_ARCHIVE,
-            self::DIRECTIVE_NO_FOLLOW,
-            self::DIRECTIVE_NO_IMAGE_INDEX,
-            self::DIRECTIVE_NO_INDEX,
-            self::DIRECTIVE_NO_ODP,
-            self::DIRECTIVE_NO_SNIPPET,
-            self::DIRECTIVE_NO_TRANSLATE,
-            self::DIRECTIVE_UNAVAILABLE_AFTER
+            self::DIRECTIVE_ALL => 'All',
+            self::DIRECTIVE_NO_ARCHIVE => 'NoArchive',
+            self::DIRECTIVE_NO_FOLLOW => 'NoFollow',
+            self::DIRECTIVE_NO_IMAGE_INDEX => 'NoImageIndex',
+            self::DIRECTIVE_NO_INDEX => 'NoIndex',
+            self::DIRECTIVE_NONE => 'None',
+            self::DIRECTIVE_NO_ODP => 'NoODP',
+            self::DIRECTIVE_NO_SNIPPET => 'NoSnippet',
+            self::DIRECTIVE_NO_TRANSLATE => 'NoTranslate',
+            self::DIRECTIVE_UNAVAILABLE_AFTER => 'UnavailableAfter',
         ];
     }
 
     /**
      * Add rule
      *
+     * @param string $directive
      * @return void
      */
-    private function addRule()
+    private function addRule($directive)
     {
         if (!isset($this->rules[$this->currentUserAgent])) {
             $this->rules[$this->currentUserAgent] = [];
         }
-        $directive = new directive($this->currentDirective, $this->currentRule, $this->options);
-        $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], $directive->getArray());
+        $class = __NAMESPACE__ . "\\XRobotsTagParser\\directives\\$directive";
+        $object = new $class($this->currentRule, $this->options);
+        if (!$object instanceof XRobotsTagParser\directives\directiveInterface) {
+            trigger_error('Directive class invalid', E_USER_ERROR);
+        }
+        $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], [$object->getDirective() => $object->getValue()]);
     }
 
     /**
@@ -179,7 +181,6 @@ class XRobotsTagParser
     {
         $this->currentRule = '';
         $this->currentUserAgent = self::USERAGENT_DEFAULT;
-        $this->currentDirective = '';
     }
 
     /**

@@ -1,7 +1,5 @@
 <?php
-
 namespace vipnytt\XRobotsTagParser\directives;
-
 
 interface directiveInterface
 {

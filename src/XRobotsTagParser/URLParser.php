@@ -1,11 +1,11 @@
 <?php
+namespace vipnytt\XRobotsTagParser;
+
 /**
  * URL parser
  *
  * @author Jan-Petter Gundersen (europe.jpg@gmail.com)
  */
-
-namespace vipnytt\XRobotsTagParser;
 
 final class URLParser
 {

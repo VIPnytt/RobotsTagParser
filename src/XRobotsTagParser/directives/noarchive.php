@@ -1,9 +1,7 @@
 <?php
-
 namespace vipnytt\XRobotsTagParser\directives;
 
-
-final class noarchive implements directiveInterface
+final class NoArchive implements directiveInterface
 {
     const DIRECTIVE = 'noarchive';
 

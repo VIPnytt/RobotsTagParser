@@ -1,9 +1,7 @@
 <?php
-
 namespace vipnytt\XRobotsTagParser\directives;
 
-
-final class noindex implements directiveInterface
+final class NoIndex implements directiveInterface
 {
     const DIRECTIVE = 'noindex';
 
