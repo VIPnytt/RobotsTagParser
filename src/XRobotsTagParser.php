@@ -22,7 +22,7 @@ use vipnytt\XRobotsTagParser\UserAgentParser;
 
 class XRobotsTagParser
 {
-    const HEADER_RULE_IDENTIFIER = 'x-robots-tag';
+    const HEADER_RULE_IDENTIFIER = 'X-Robots-Tag';
     const USERAGENT_DEFAULT = '';
 
     const DIRECTIVE_ALL = 'all';
@@ -38,6 +38,7 @@ class XRobotsTagParser
 
     protected $url = '';
     protected $userAgent = self::USERAGENT_DEFAULT;
+    protected $userAgentMatch = self::USERAGENT_DEFAULT;
     protected $config = [];
 
     protected $headers = [];
@@ -60,16 +61,15 @@ class XRobotsTagParser
         if (!filter_var($this->url, FILTER_VALIDATE_URL)) {
             throw new XRobotsTagParserException('Invalid URL provided');
         }
+        // User-Agent for HTTP request
+        $this->userAgent = $userAgent;
         // Set any optional configuration options
         $this->config = $config;
-        if (isset($this->config['headers']) && is_array($this->config['headers'])) {
-            $this->headers = $this->config['headers'];
-        }
-        // Set User-Agent
-        $parser = new UserAgentParser($userAgent);
-        $this->userAgent = $parser->match(array_keys($this->rules), self::USERAGENT_DEFAULT);
         // Parse rules
         $this->parse();
+        // User-Agent matching rules
+        $parser = new UserAgentParser($this->userAgent);
+        $this->userAgentMatch = $parser->match(array_keys($this->rules), self::USERAGENT_DEFAULT);
     }
 
     /**
@@ -79,18 +79,30 @@ class XRobotsTagParser
      */
     protected function parse()
     {
-        if (empty($this->headers)) {
-            $this->headers = $this->getHeaders();
-        }
+        $this->headers = $this->selectHeaderSource();
         foreach ($this->headers as $header) {
             $parts = array_map('trim', explode(':', mb_strtolower($header), 2));
-            if (count($parts) < 2 || $parts[0] != self::HEADER_RULE_IDENTIFIER) {
+            if (count($parts) < 2 || $parts[0] != mb_strtolower(self::HEADER_RULE_IDENTIFIER)) {
                 // Header is not a rule
                 continue;
             }
             $this->currentRule = $parts[1];
             $this->detectDirectives();
         }
+    }
+
+    /**
+     * Select HTTP header source
+     *
+     * @return array
+     */
+    protected function selectHeaderSource()
+    {
+        if (isset($this->config['headers']) && is_array($this->config['headers'])) {
+            return $this->config['headers'];
+        }
+        // No provided HTTP headers
+        return $this->getHeaders();
     }
 
     /**
@@ -107,7 +119,11 @@ class XRobotsTagParser
             }
             $client = new GuzzleHttp\Client();
             $res = $client->head($this->url, $this->config['guzzle']);
-            return $res->getHeaders();
+            $headers = [];
+            foreach ($res->getHeader(self::HEADER_RULE_IDENTIFIER) as $name => $values) {
+                $headers[] = $name . ': ' . implode(' ', $values) . "\r\n";
+            }
+            return $headers;
         } catch (GuzzleHttp\Exception\TransferException $e) {
             throw new XRobotsTagParserException($e->getMessage());
         }
@@ -129,7 +145,7 @@ class XRobotsTagParser
         foreach ($directives as $rule) {
             $directive = trim(explode(':', $rule, 2)[0]);
             if (in_array($directive, array_keys($this->directiveClasses()))) {
-                $this->addRule($this->directiveClasses()[$directive]);
+                $this->addRule($directive);
             }
         }
         $this->cleanup();
@@ -168,7 +184,7 @@ class XRobotsTagParser
         if (!isset($this->rules[$this->currentUserAgent])) {
             $this->rules[$this->currentUserAgent] = [];
         }
-        $class = __NAMESPACE__ . "\\XRobotsTagParser\\directives\\$directive";
+        $class = "\\" . __CLASS__ . "\\directives\\" . $this->directiveClasses()[$directive];
         $object = new $class($this->currentRule);
         if (!$object instanceof XRobotsTagParser\directives\directiveInterface) {
             throw new XRobotsTagParserException('Unsupported directive class');
@@ -201,8 +217,8 @@ class XRobotsTagParser
             $rules = array_merge($rules, $this->rules[self::USERAGENT_DEFAULT]);
         }
         // Matching UserAgent
-        if (isset($this->rules[$this->userAgent])) {
-            $rules = array_merge($rules, $this->rules[$this->userAgent]);
+        if (isset($this->rules[$this->userAgentMatch])) {
+            $rules = array_merge($rules, $this->rules[$this->userAgentMatch]);
         }
         if (!$raw) {
             $rebuild = new Rebuild($rules);
@@ -234,7 +250,7 @@ class XRobotsTagParser
         if (!in_array($directive, array_keys($this->directiveClasses()))) {
             throw new XRobotsTagParserException('Unknown directive');
         }
-        $class = "XRobotsTagParser\\directives\\$directive";
+        $class = "\\" . __CLASS__ . "\\directives\\" . $this->directiveClasses()[$directive];
         $object = new $class($this->directiveClasses()[$directive]);
         if (!$object instanceof XRobotsTagParser\directives\directiveInterface) {
             throw new XRobotsTagParserException('Unsupported directive class');
