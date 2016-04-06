@@ -10,12 +10,12 @@ class UnavailableAfterTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider generateDataForTest
      * @param string $url
-     * @param string $bot
+     * @param string $userAgent
      * @param array $options
      */
-    public function testUnavailableAfter($url, $bot, $options)
+    public function testUnavailableAfter($url, $userAgent, $options)
     {
-        $parser = new XRobotsTagParser($url, $bot, $options);
+        $parser = new XRobotsTagParser($url, $userAgent, $options);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->getRules(true));

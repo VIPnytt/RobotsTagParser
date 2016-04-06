@@ -18,7 +18,6 @@ namespace vipnytt;
 use GuzzleHttp;
 use vipnytt\XRobotsTagParser\Exceptions\XRobotsTagParserException;
 use vipnytt\XRobotsTagParser\Rebuild;
-use vipnytt\XRobotsTagParser\URLParser;
 use vipnytt\XRobotsTagParser\UserAgentParser;
 
 class XRobotsTagParser
@@ -57,23 +56,20 @@ class XRobotsTagParser
      */
     public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, array $config = [])
     {
-        // Parse URL
-        $urlParser = new URLParser(trim($url));
-        if (!$urlParser->isValid()) {
+        $this->url = $url;
+        if (!filter_var($this->url, FILTER_VALIDATE_URL)) {
             throw new XRobotsTagParserException('Invalid URL provided');
         }
-        // Encode URL
-        $this->url = $urlParser->encode();
         // Set any optional configuration options
         $this->config = $config;
         if (isset($this->config['headers']) && is_array($this->config['headers'])) {
             $this->headers = $this->config['headers'];
         }
-        // Parse rules
-        $this->parse();
         // Set User-Agent
         $parser = new UserAgentParser($userAgent);
         $this->userAgent = $parser->match(array_keys($this->rules), self::USERAGENT_DEFAULT);
+        // Parse rules
+        $this->parse();
     }
 
     /**
@@ -239,7 +235,7 @@ class XRobotsTagParser
             throw new XRobotsTagParserException('Unknown directive');
         }
         $class = "XRobotsTagParser\\directives\\$directive";
-        $object = new $class($directive);
+        $object = new $class($this->directiveClasses()[$directive]);
         if (!$object instanceof XRobotsTagParser\directives\directiveInterface) {
             throw new XRobotsTagParserException('Unsupported directive class');
         }

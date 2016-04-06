@@ -10,12 +10,12 @@ class ExportTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider generateDataForTest
      * @param string $url
-     * @param string $bot
+     * @param string $userAgent
      * @param array $options
      */
-    public function testExport($url, $bot, $options)
+    public function testExport($url, $userAgent, $options)
     {
-        $parser = new XRobotsTagParser($url, $bot, $options);
+        $parser = new XRobotsTagParser($url, $userAgent, $options);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertTrue($parser->export()['googlebot']['noindex']);
