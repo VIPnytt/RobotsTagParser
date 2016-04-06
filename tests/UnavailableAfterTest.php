@@ -22,6 +22,9 @@ class UnavailableAfterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($parser->getRules(false)['noindex']);
         $this->assertEquals(['unavailable_after' => 'Tuesday, 31-Dec-30 23:00:00 PST'], $parser->export()['']);
         $this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->export()['googlebot']);
+
+        $this->assertTrue(is_string($parser->getDirectiveMeaning('unavailable_after')));
+        $this->assertTrue(strlen($parser->getDirectiveMeaning('unavailable_after')) > 30);
     }
 
     /**

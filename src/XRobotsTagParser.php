@@ -60,7 +60,7 @@ class XRobotsTagParser
         // Parse URL
         $urlParser = new URLParser(trim($url));
         if (!$urlParser->isValid()) {
-            throw new XRobotsTagParserException('Invalid URL');
+            throw new XRobotsTagParserException('Invalid URL provided');
         }
         // Encode URL
         $this->url = $urlParser->encode();
@@ -84,7 +84,7 @@ class XRobotsTagParser
     protected function parse()
     {
         if (empty($this->headers)) {
-            $this->getHeaders();
+            $this->headers = $this->getHeaders();
         }
         foreach ($this->headers as $header) {
             $parts = array_map('trim', explode(':', mb_strtolower($header), 2));
@@ -95,7 +95,6 @@ class XRobotsTagParser
             $this->currentRule = $parts[1];
             $this->detectDirectives();
         }
-
     }
 
     /**
@@ -106,9 +105,6 @@ class XRobotsTagParser
      */
     protected function getHeaders()
     {
-        if (!filter_var($this->url, FILTER_VALIDATE_URL)) {
-            throw new XRobotsTagParserException('Passed URL not valid according to the filter_var function');
-        }
         try {
             if (!isset($this->config['guzzle']['headers']['User-Agent'])) {
                 $this->config['guzzle']['headers']['User-Agent'] = $this->userAgent;
