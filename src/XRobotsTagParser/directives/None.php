@@ -9,15 +9,10 @@ final class None implements directiveInterface
      * Constructor
      *
      * @param string $value
-     * @param array $options
      */
-    public function __construct($value, $options = [])
+    public function __construct($value)
     {
-        foreach ($options as $key => $value) {
-            if (isset($this->$key)) {
-                $this->$key = $value;
-            }
-        }
+
     }
 
     /**

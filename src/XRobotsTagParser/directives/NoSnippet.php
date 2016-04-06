@@ -9,15 +9,10 @@ final class NoSnippet implements directiveInterface
      * Constructor
      *
      * @param string $rule
-     * @param array $options
      */
-    public function __construct($rule, $options = [])
+    public function __construct($rule)
     {
-        foreach ($options as $key => $rule) {
-            if (isset($this->$key)) {
-                $this->$key = $rule;
-            }
-        }
+
     }
 
     /**

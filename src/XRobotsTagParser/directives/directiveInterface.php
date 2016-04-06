@@ -7,9 +7,8 @@ interface directiveInterface
      * Constructor
      *
      * @param string $rule
-     * @param array $options
      */
-    public function __construct($rule, $options = []);
+    public function __construct($rule);
 
     /**
      * Get directive name

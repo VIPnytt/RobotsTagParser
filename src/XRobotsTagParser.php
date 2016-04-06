@@ -15,6 +15,8 @@ namespace vipnytt;
  * @link https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#using-the-x-robots-tag-http-header
  */
 
+use GuzzleHttp;
+use vipnytt\XRobotsTagParser\Exceptions\XRobotsTagParserException;
 use vipnytt\XRobotsTagParser\Rebuild;
 use vipnytt\XRobotsTagParser\URLParser;
 use vipnytt\XRobotsTagParser\UserAgentParser;
@@ -35,15 +37,16 @@ class XRobotsTagParser
     const DIRECTIVE_NO_TRANSLATE = 'notranslate';
     const DIRECTIVE_UNAVAILABLE_AFTER = 'unavailable_after';
 
-    private $url = '';
-    private $userAgent = self::USERAGENT_DEFAULT;
+    protected $url = '';
+    protected $userAgent = self::USERAGENT_DEFAULT;
+    protected $config = [];
 
-    private $headers = [];
-    private $currentRule = '';
-    private $currentUserAgent = self::USERAGENT_DEFAULT;
+    protected $headers = [];
+    protected $currentRule = '';
+    protected $currentUserAgent = self::USERAGENT_DEFAULT;
 
-    private $options = [];
-    private $rules = [];
+    protected $options = [];
+    protected $rules = [];
 
     /**
      * Constructor
@@ -51,20 +54,22 @@ class XRobotsTagParser
      * @param string $url
      * @param string $userAgent
      * @param array $options
+     * @throws XRobotsTagParserException
      */
-    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, $options = [])
+    public function __construct($url, $userAgent = self::USERAGENT_DEFAULT, array $options = [])
     {
         // Parse URL
         $urlParser = new URLParser(trim($url));
         if (!$urlParser->isValid()) {
-            trigger_error('Invalid URL', E_USER_WARNING);
+            throw new XRobotsTagParserException('Invalid URL');
         }
         // Encode URL
         $this->url = $urlParser->encode();
         // Set any optional options
         $this->options = $options;
-        // Get headers
-        $this->getHeaders();
+        if (isset($this->config['headers']) && is_array($this->config['headers'])) {
+            $this->headers = $this->config['headers'];
+        }
         // Parse rules
         $this->parse();
         // Set User-Agent
@@ -73,31 +78,15 @@ class XRobotsTagParser
     }
 
     /**
-     * Request HTTP headers
-     *
-     * @return bool
-     */
-    private function getHeaders()
-    {
-        if (isset($this->options['headers'])) {
-            $this->headers = $this->options['headers'];
-            return true;
-        }
-        $this->headers = get_headers($this->url);
-        if ($this->headers === false) {
-            trigger_error('Unable to fetch HTTP headers', E_USER_ERROR);
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Parse HTTP headers
      *
      * @return void
      */
-    private function parse()
+    protected function parse()
     {
+        if (empty($this->headers)) {
+            $this->getHeaders();
+        }
         foreach ($this->headers as $header) {
             $parts = array_map('trim', explode(':', mb_strtolower($header), 2));
             if (count($parts) < 2 || $parts[0] != self::HEADER_RULE_IDENTIFIER) {
@@ -111,11 +100,34 @@ class XRobotsTagParser
     }
 
     /**
+     * Request the HTTP headers from an URL
+     *
+     * @return array Raw HTTP headers
+     * @throws XRobotsTagParserException
+     */
+    protected function getHeaders()
+    {
+        if (!filter_var($this->url, FILTER_VALIDATE_URL)) {
+            throw new XRobotsTagParserException('Passed URL not valid according to the filter_var function');
+        }
+        try {
+            if (!isset($this->config['guzzle']['headers']['User-Agent'])) {
+                $this->config['guzzle']['headers']['User-Agent'] = $this->userAgent;
+            }
+            $client = new GuzzleHttp\Client();
+            $res = $client->head($this->url, $this->config['guzzle']);
+            return $res->getHeaders();
+        } catch (GuzzleHttp\Exception\TransferException $e) {
+            throw new XRobotsTagParserException($e->getMessage());
+        }
+    }
+
+    /**
      * Detect directives in rule
      *
      * @return void
      */
-    private function detectDirectives()
+    protected function detectDirectives()
     {
         $directives = array_map('trim', explode(',', $this->currentRule));
         $pair = array_map('trim', explode(':', $directives[0], 2));
@@ -158,16 +170,17 @@ class XRobotsTagParser
      *
      * @param string $directive
      * @return void
+     * @throws XRobotsTagParserException
      */
-    private function addRule($directive)
+    protected function addRule($directive)
     {
         if (!isset($this->rules[$this->currentUserAgent])) {
             $this->rules[$this->currentUserAgent] = [];
         }
-        $class = __NAMESPACE__ . "\\XRobotsTagParser\\directives\\$directive";
-        $object = new $class($this->currentRule, $this->options);
+        $class = "XRobotsTagParser\\directives\\$directive";
+        $object = new $class($this->currentRule);
         if (!$object instanceof XRobotsTagParser\directives\directiveInterface) {
-            trigger_error('Directive class invalid', E_USER_ERROR);
+            throw new XRobotsTagParserException('Unsupported directive class');
         }
         $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], [$object->getDirective() => $object->getValue()]);
     }
@@ -177,7 +190,7 @@ class XRobotsTagParser
      *
      * @return void
      */
-    private function cleanup()
+    protected function cleanup()
     {
         $this->currentRule = '';
         $this->currentUserAgent = self::USERAGENT_DEFAULT;
