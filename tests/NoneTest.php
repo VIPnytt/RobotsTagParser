@@ -1,6 +1,6 @@
 <?php
 
-namespace vipnytt\XRobotsTagParser\tests;
+namespace vipnytt\XRobotsTagParser\Tests;
 
 use vipnytt\XRobotsTagParser;
 
