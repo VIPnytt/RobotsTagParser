@@ -48,7 +48,8 @@ final class UnavailableAfter implements directiveInterface
     public function getValue()
     {
         $parts = explode(',', trim(substr($this->value, mb_stripos($this->value, self::DIRECTIVE) + mb_strlen(self::DIRECTIVE) + 1)));
-        for ($i = 1; $i <= count($parts); $i++) {
+        $count = count($parts);
+        for ($i = 1; $i <= $count; $i++) {
             foreach ($this->supportedDateFormats as $format) {
                 $dateTime = date_create_from_format($format, trim(implode(',', array_slice($parts, 0, $i))));
                 if ($dateTime !== false) {

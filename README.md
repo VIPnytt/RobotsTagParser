@@ -9,7 +9,7 @@
 # X-Robots-Tag HTTP header parser class
 PHP class to parse X-Robots-Tag HTTP headers according to [Google X-Robots-Tag HTTP header specifications](https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#using-the-x-robots-tag-http-header).
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/14290447-4f12-4464-8be7-7e507b489afa/big.png)](https://insight.sensiolabs.com/projects/14290447-4f12-4464-8be7-7e507b489afa)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/b89a070f-07d3-490a-841a-0ae995574158/big.png)](https://insight.sensiolabs.com/projects/b89a070f-07d3-490a-841a-0ae995574158)
 
 ## Installation
 The library is available for install via Composer package. To install via Composer, please add the requirement to your `composer.json` file, like this:

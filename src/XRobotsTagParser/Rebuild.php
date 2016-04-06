@@ -27,9 +27,9 @@ final class Rebuild
         while ($past !== $this->directiveArray) {
             $past = $this->directiveArray;
             $this->all();
-            $this->noindex();
+            $this->noIndex();
             $this->none();
-            $this->unavailable_after();
+            $this->unavailableAfter();
         }
     }
 
@@ -51,7 +51,7 @@ final class Rebuild
      *
      * @return void
      */
-    private function noindex()
+    private function noIndex()
     {
         if (!isset($this->directiveArray['noindex'])) {
             return;
@@ -78,7 +78,7 @@ final class Rebuild
      *
      * @return void
      */
-    private function unavailable_after()
+    private function unavailableAfter()
     {
         if (!isset($this->directiveArray['unavailable_after'])) {
             return;
