@@ -8,7 +8,7 @@ final class Rebuild
     /**
      * Constructor
      *
-     * @param string $directives
+     * @param array $directives
      */
     public function __construct($directives)
     {
