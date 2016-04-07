@@ -9,13 +9,12 @@ class UnavailableAfterTest extends \PHPUnit_Framework_TestCase
      * unavailable_after test
      *
      * @dataProvider generateDataForTest
-     * @param string $url
      * @param string $userAgent
-     * @param array $options
+     * @param array $headers
      */
-    public function testUnavailableAfter($url, $userAgent, $options)
+    public function testUnavailableAfter($userAgent, $headers)
     {
-        $parser = new XRobotsTagParser($url, $userAgent, $options);
+        $parser = new XRobotsTagParser($userAgent, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->getRules(true));
@@ -35,23 +34,17 @@ class UnavailableAfterTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'http://example.com/',
                 'googlebot',
-                ['headers' =>
-                    [
-                        'X-Robots-Tag: unavailable_after: Tuesday, 31-Dec-30 23:00:00 PST',
-                        'X-Robots-Tag: googlebot: unavailable_after: Saturday, 01-Jul-00 07:00:00 PST'
-                    ]
+                [
+                    'X-Robots-Tag: unavailable_after: Tuesday, 31-Dec-30 23:00:00 PST',
+                    'X-Robots-Tag: googlebot: unavailable_after: Saturday, 01-Jul-00 07:00:00 PST'
                 ]
             ],
             [
-                'http://example.com/',
                 'googlebot',
-                ['headers' =>
-                    [
-                        'X-Robots-Tag: unavailable_after: 31 Dec 2030 23:00:00 PST',
-                        'X-Robots-Tag: googlebot: unavailable_after: 01 Jul 2000 07:00:00 PST'
-                    ]
+                [
+                    'X-Robots-Tag: unavailable_after: 31 Dec 2030 23:00:00 PST',
+                    'X-Robots-Tag: googlebot: unavailable_after: 01 Jul 2000 07:00:00 PST'
                 ]
             ]
         ];

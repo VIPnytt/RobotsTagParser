@@ -2,7 +2,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/VIPnytt/X-Robots-Tag-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/VIPnytt/X-Robots-Tag-parser/?branch=master)
 [![Code Climate](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser/badges/gpa.svg)](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser)
 [![Test Coverage](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser/badges/coverage.svg)](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser/coverage)
-[![License](https://poser.pugx.org/VIPnytt/X-Robots-Tag-parser/license)](https://packagist.org/packages/VIPnytt/X-Robots-Tag-parser)
+[![License](https://poser.pugx.org/VIPnytt/X-Robots-Tag-parser/license)](https://github.com/VIPnytt/X-Robots-Tag-parser/blob/master/LICENSE)
 [![Packagist](https://img.shields.io/packagist/v/vipnytt/x-robots-tag-parser.svg)](https://packagist.org/packages/vipnytt/x-robots-tag-parser)
 [![Join the chat at https://gitter.im/VIPnytt/X-Robots-Tag-parser](https://badges.gitter.im/VIPnytt/X-Robots-Tag-parser.svg)](https://gitter.im/VIPnytt/X-Robots-Tag-parser)
 

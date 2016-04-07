@@ -9,13 +9,12 @@ class NoindexTest extends \PHPUnit_Framework_TestCase
      * noindex test
      *
      * @dataProvider generateDataForTest
-     * @param string $url
      * @param string $userAgent
-     * @param array $options
+     * @param array $headers
      */
-    public function testNoIndex($url, $userAgent, $options)
+    public function testNoIndex($userAgent, $headers)
     {
-        $parser = new XRobotsTagParser($url, $userAgent, $options);
+        $parser = new XRobotsTagParser($userAgent, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertTrue($parser->getRules(true)['noindex']);
@@ -34,12 +33,9 @@ class NoindexTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'http://example.com/',
                 'googlebot',
-                ['headers' =>
-                    [
-                        'X-Robots-Tag: noindex'
-                    ]
+                [
+                    'X-Robots-Tag: noindex'
                 ]
             ]
         ];

@@ -9,13 +9,12 @@ class GetRulesTest extends \PHPUnit_Framework_TestCase
      * Get rules
      *
      * @dataProvider generateDataForTest
-     * @param string $url
      * @param string $userAgent
-     * @param array $options
+     * @param array $headers
      */
-    public function testGetRules($url, $userAgent, $options)
+    public function testGetRules($userAgent, $headers)
     {
-        $parser = new XRobotsTagParser($url, $userAgent, $options);
+        $parser = new XRobotsTagParser($userAgent, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertTrue($parser->getRules(true)['noindex']);
@@ -31,14 +30,11 @@ class GetRulesTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'http://example.com/',
                 'googlebot',
-                ['headers' =>
-                    [
-                        'X-Robots-Tag: googlebot: noindex, noarchive',
-                        'X-Robots-Tag: bingbot: noindex, noodp',
-                        'X-Robots-Tag: noindex, noodp'
-                    ]
+                [
+                    'X-Robots-Tag: googlebot: noindex, noarchive',
+                    'X-Robots-Tag: bingbot: noindex, noodp',
+                    'X-Robots-Tag: noindex, noodp',
                 ]
             ]
         ];

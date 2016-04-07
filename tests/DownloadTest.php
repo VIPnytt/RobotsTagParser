@@ -14,7 +14,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
      */
     public function testDownload($url, $userAgent)
     {
-        $parser = new XRobotsTagParser($url, $userAgent);
+        $parser = new XRobotsTagParser\Adapters\url($url, $userAgent);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
         $this->assertTrue($parser->export() == []);
