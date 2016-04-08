@@ -38,7 +38,7 @@ $parser = new XRobotsTagParser('myUserAgent', $headers);
 $rules = $parser->getRules(); // <-- returns an array of rules
 ```
 
-### Different approaches
+### Different approaches:
 
 #### Get the HTTP headers by requesting an URL
 ```php

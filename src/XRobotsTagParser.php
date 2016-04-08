@@ -73,9 +73,7 @@ class XRobotsTagParser
             $this->currentRule = $parts[1];
             $this->detectDirectives();
         }
-        $userAgentParser = new UserAgentParser($this->userAgent);
-        $match = $userAgentParser->match(array_keys($this->rules), '');
-        $this->userAgentMatch = (is_string($match)) ? $match : '';
+        $this->matchUserAgent();
     }
 
     /**
@@ -150,6 +148,19 @@ class XRobotsTagParser
     {
         $this->currentRule = '';
         $this->currentUserAgent = '';
+    }
+
+    /**
+     * Find the most rule-matching User-Agent
+     *
+     * @return string
+     */
+    protected function matchUserAgent()
+    {
+        $userAgentParser = new UserAgentParser($this->userAgent);
+        $match = $userAgentParser->match(array_keys($this->rules), '');
+        $this->userAgentMatch = (is_string($match)) ? $match : '';
+        return $this->userAgentMatch;
     }
 
     /**
