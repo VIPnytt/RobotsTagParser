@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-final class NoImageIndex implements directiveInterface
+final class NoImageIndex implements DirectiveInterface
 {
     const DIRECTIVE = 'noimageindex';
     const MEANING = 'Do not index images on this page.';

@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-final class None implements directiveInterface
+final class None implements DirectiveInterface
 {
     const DIRECTIVE = 'none';
     const MEANING = 'Equivalent to `noindex` and `nofollow`.';

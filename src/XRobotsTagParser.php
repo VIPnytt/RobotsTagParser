@@ -74,7 +74,8 @@ class XRobotsTagParser
             $this->detectDirectives();
         }
         $userAgentParser = new UserAgentParser($this->userAgent);
-        $this->userAgentMatch = $userAgentParser->match(array_keys($this->rules), '');
+        $match = $userAgentParser->match(array_keys($this->rules), '');
+        $this->userAgentMatch = (is_string($match)) ? $match : '';
     }
 
     /**
@@ -134,7 +135,7 @@ class XRobotsTagParser
         }
         $class = "\\" . __CLASS__ . "\\directives\\" . $this->directiveClasses()[$directive];
         $object = new $class($this->currentRule);
-        if (!$object instanceof XRobotsTagParser\directives\directiveInterface) {
+        if (!$object instanceof XRobotsTagParser\directives\DirectiveInterface) {
             throw new XRobotsTagParserException('Unsupported directive class');
         }
         $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], [$object->getDirective() => $object->getValue()]);
@@ -200,7 +201,7 @@ class XRobotsTagParser
         }
         $class = "\\" . __CLASS__ . "\\directives\\" . $this->directiveClasses()[$directive];
         $object = new $class($this->directiveClasses()[$directive]);
-        if (!$object instanceof XRobotsTagParser\directives\directiveInterface) {
+        if (!$object instanceof XRobotsTagParser\directives\DirectiveInterface) {
             throw new XRobotsTagParserException('Unsupported directive class');
         }
         return $object->getMeaning();

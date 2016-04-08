@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-final class All implements directiveInterface
+final class All implements DirectiveInterface
 {
     const DIRECTIVE = 'all';
     const MEANING = 'There are no restrictions for indexing or serving. Note: this directive is the default value and has no effect if explicitly listed.';

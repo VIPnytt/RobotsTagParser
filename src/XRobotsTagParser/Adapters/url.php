@@ -4,7 +4,6 @@ namespace vipnytt\XRobotsTagParser\Adapters;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use vipnytt\XRobotsTagParser;
-use vipnytt\XRobotsTagParser\Exceptions\XrobotsTagParserException;
 
 /**
  * Class url
@@ -13,19 +12,19 @@ use vipnytt\XRobotsTagParser\Exceptions\XrobotsTagParserException;
  *
  * @package vipnytt\XRobotsTagParser\Adapters
  */
-class url extends XRobotsTagParser\Adapters\GuzzleHttp
+class Url extends XRobotsTagParser\Adapters\GuzzleHttp
 {
     /**
      * Constructor
      *
      * @param string $url
      * @param string $userAgent
-     * @throws XRobotsTagParserException
+     * @throws XRobotsTagParser\Exceptions\XrobotsTagParserException
      */
     public function __construct($url, $userAgent = '')
     {
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new XRobotsTagParserException('Invalid URL provided');
+            throw new XRobotsTagParser\Exceptions\XrobotsTagParserException('Invalid URL provided');
         }
         $config = [];
         if (!empty($userAgent)) {
@@ -40,7 +39,7 @@ class url extends XRobotsTagParser\Adapters\GuzzleHttp
             $request = $client->Request('GET', $url);
             parent::__construct($request, $userAgent);
         } catch (TransferException $e) {
-            throw new XRobotsTagParserException($e->getMessage());
+            throw new XRobotsTagParser\Exceptions\XrobotsTagParserException($e->getMessage());
         }
     }
 }

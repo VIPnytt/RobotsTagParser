@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-final class NoSnippet implements directiveInterface
+final class NoSnippet implements DirectiveInterface
 {
     const DIRECTIVE = 'nosnippet';
     const MEANING = 'Do not show a snippet in the search results for this page.';

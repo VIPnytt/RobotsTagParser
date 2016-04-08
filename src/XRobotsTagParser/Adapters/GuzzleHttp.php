@@ -1,9 +1,8 @@
 <?php
 namespace vipnytt\XRobotsTagParser\Adapters;
 
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use vipnytt\XRobotsTagParser;
-use vipnytt\XRobotsTagParser\Exceptions\XrobotsTagParserException;
 
 /**
  * Class GuzzleHttp
@@ -17,15 +16,14 @@ class GuzzleHttp extends XRobotsTagParser
     /**
      * Constructor
      *
-     * @param \GuzzleHttp\Psr7\Response $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @param string $userAgent
-     * @throws XRobotsTagParserException
      * @throws XRobotsTagParser\Exceptions\XRobotsTagParserException
      */
-    public function __construct(Response $response, $userAgent = '')
+    public function __construct(ResponseInterface $response, $userAgent = '')
     {
-        if (!$response instanceof Response) {
-            throw new XRobotsTagParserException('Object is not an instance of `\GuzzleHttp\Psr7\Response`');
+        if (!$response instanceof ResponseInterface) {
+            throw new XRobotsTagParser\Exceptions\XrobotsTagParserException('Object is not an instance of `\Psr\Http\Message\ResponseInterface`');
         }
         parent::__construct($userAgent);
         $headers = [];

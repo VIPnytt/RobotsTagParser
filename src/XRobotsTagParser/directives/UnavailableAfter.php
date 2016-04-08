@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-final class UnavailableAfter implements directiveInterface
+final class UnavailableAfter implements DirectiveInterface
 {
     const DIRECTIVE = 'unavailable_after';
     const MEANING = 'Do not show this page in search results after the specified date/time.';

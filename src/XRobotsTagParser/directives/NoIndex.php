@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-final class NoIndex implements directiveInterface
+final class NoIndex implements DirectiveInterface
 {
     const DIRECTIVE = 'noindex';
     const MEANING = 'Do not show this page in search results and do not show a `Cached` link in search results.';

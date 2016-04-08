@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-final class NoTranslate implements directiveInterface
+final class NoTranslate implements DirectiveInterface
 {
     const DIRECTIVE = 'notranslate';
     const MEANING = 'Do not offer translation of this page in search results.';

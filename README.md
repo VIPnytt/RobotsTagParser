@@ -12,48 +12,77 @@ PHP class to parse X-Robots-Tag HTTP headers according to [Google X-Robots-Tag H
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b89a070f-07d3-490a-841a-0ae995574158/big.png)](https://insight.sensiolabs.com/projects/b89a070f-07d3-490a-841a-0ae995574158)
 
 ## Installation
-The library is available for install via Composer package. To install via Composer, please add the requirement to your `composer.json` file, like this:
+The library is available via [Composer](https://getcomposer.org). Add this to your `composer.json` file:
 
 ```json
 {
     "require": {
-        "vipnytt/x-robots-tag-parser": "0.*"
+        "vipnytt/x-robots-tag-parser": "0.2.*"
     }
 }
 ```
+Then run `composer update`.
 
-and then use composer to load the lib:
+## Getting Started
 
+### Basic example
+Get all rules affecting _you_, this includes the following:
+- All general rules
+- Rules specific to your User-Agent (if any)
 ```php
-<?php
-require 'vendor/autoload.php';
-$parser = new \vipnytt\XRobotsTagParser($url, $userAgent);
-...
+use vipnytt\XRobotsTagParser;
+
+$headers = get_headers('http://example.com/'); // <-- for example only, returns an array
+
+$parser = new XRobotsTagParser('myUserAgent', $headers);
+$rules = $parser->getRules(); // <-- returns an array of rules
 ```
 
-You can find out more about Composer here: https://getcomposer.org/
+### Different approaches
 
-
-## Usage
-Get rules for a specific UserAgent:
+#### Get the HTTP headers by requesting an URL
 ```php
-$parser = new \vipnytt\XRobotsTagParser('http://example.com/', 'myUserAgent');
+use vipnytt\XRobotsTagParser;
+
+$parser = new XRobotsTagParser\Adapters\Url('http://example.com/', 'myUserAgent');
+$rules = $parser->getRules();
+```
+
+#### Use your existing GuzzleHttp request
+```php
+use vipnytt\XRobotsTagParser;
+use GuzzleHttp\Client;
+
+$client = new GuzzleHttp\Client();
+$response = $client->request('GET', 'http://example.com/');
+
+$parser = new XRobotsTagParser\Adapters\GuzzleHttp($response, 'myUserAgent');
 $array = $parser->getRules();
 ```
 
-Use existing headers:
+#### Provide HTTP headers as an string
 ```php
-$parser = new \vipnytt\XRobotsTagParser('http://example.com/', 'myUserAgent', ['headers' => $headers]);
+use vipnytt\XRobotsTagParser;
+
+$string = <<<STRING
+HTTP/1.1 200 OK
+Date: Tue, 25 May 2010 21:42:43 GMT
+X-Robots-Tag: noindex
+X-Robots-Tag: nofollow
+STRING;
+
+$parser = new XRobotsTagParser\Adapters\TextString($string, 'myUserAgent');
 $array = $parser->getRules();
 ```
 
-Export rules for all UserAgents:
+### Export all rules
+Returns an array containing all rules for _any_ User-Agent.
 ```php
-$parser = new \vipnytt\XRobotsTagParser('http://example.com/', 'myUserAgent');
+use \vipnytt\XRobotsTagParser;
+
+$parser = new XRobotsTagParser('myUserAgent', $headers);
 $array = $parser->export();
 ```
-
-
 
 ## Supported directives
 - [x] ````all```` - There are no restrictions for indexing or serving.
@@ -66,3 +95,5 @@ $array = $parser->export();
 - [x] ````notranslate```` - Do not offer translation of this page in search results.
 - [x] ````noimageindex```` - Do not index images on this page.
 - [x] ````unavailable_after```` - Do not show this page in search results after the specified date/time.
+
+Contributing is surely allowed! :-)

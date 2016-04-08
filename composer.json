@@ -4,8 +4,13 @@
   "keywords": [
     "X-Robots",
     "X-Robots-Tag",
+    "HTTP-header",
+    "Robots-meta-tag",
     "robots.txt",
-    "Google"
+    "Google",
+    "Robot",
+    "Spider",
+    "Web-Crawler"
   ],
   "homepage": "https://github.com/VIPnytt/X-Robots-Tag-parser",
   "type": "library",

@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-interface directiveInterface
+interface DirectiveInterface
 {
     /**
      * Constructor

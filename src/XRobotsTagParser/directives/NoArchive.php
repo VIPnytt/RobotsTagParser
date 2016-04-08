@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-final class NoArchive implements directiveInterface
+final class NoArchive implements DirectiveInterface
 {
     const DIRECTIVE = 'noarchive';
     const MEANING = 'Do not show a `Cached` link in search results.';

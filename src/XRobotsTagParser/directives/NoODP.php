@@ -1,7 +1,7 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
-final class NoODP implements directiveInterface
+final class NoODP implements DirectiveInterface
 {
     const DIRECTIVE = 'noodp';
     const MEANING = 'Do not use metadata from the `Open Directory project` (http://dmoz.org/) for titles or snippets shown for this page.';

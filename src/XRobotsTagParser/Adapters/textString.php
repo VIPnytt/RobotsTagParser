@@ -2,23 +2,21 @@
 namespace vipnytt\XRobotsTagParser\Adapters;
 
 use vipnytt\XRobotsTagParser;
-use vipnytt\XRobotsTagParser\Exceptions\XrobotsTagParserException;
 
 /**
- * Class string
+ * Class textString
  *
- * Parse line-separated string
+ * Parse line-separated text string
  *
  * @package vipnytt\XRobotsTagParser\Adapters
  */
-class string extends XRobotsTagParser
+class TextString extends XRobotsTagParser
 {
     /**
      * Constructor
      *
      * @param string $string
      * @param string $userAgent
-     * @throws XRobotsTagParserException
      */
     public function __construct($string, $userAgent = '')
     {
