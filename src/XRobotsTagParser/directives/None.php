@@ -1,6 +1,11 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
+/**
+ * Class None
+ *
+ * @package vipnytt\XRobotsTagParser\directives
+ */
 final class None implements DirectiveInterface
 {
     const DIRECTIVE = 'none';

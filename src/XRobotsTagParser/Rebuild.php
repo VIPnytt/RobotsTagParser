@@ -1,6 +1,11 @@
 <?php
 namespace vipnytt\XRobotsTagParser;
 
+/**
+ * Class Rebuild
+ *
+ * @package vipnytt\XRobotsTagParser
+ */
 final class Rebuild
 {
     private $directiveArray;

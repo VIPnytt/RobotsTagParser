@@ -1,6 +1,11 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
+/**
+ * Interface DirectiveInterface
+ *
+ * @package vipnytt\XRobotsTagParser\directives
+ */
 interface DirectiveInterface
 {
     /**

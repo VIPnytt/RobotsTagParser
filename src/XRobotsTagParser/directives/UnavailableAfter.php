@@ -1,6 +1,11 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
+/**
+ * Class UnavailableAfter
+ *
+ * @package vipnytt\XRobotsTagParser\directives
+ */
 final class UnavailableAfter implements DirectiveInterface
 {
     const DIRECTIVE = 'unavailable_after';

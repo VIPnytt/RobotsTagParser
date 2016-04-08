@@ -1,6 +1,11 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
+/**
+ * Class All
+ *
+ * @package vipnytt\XRobotsTagParser\directives
+ */
 final class All implements DirectiveInterface
 {
     const DIRECTIVE = 'all';

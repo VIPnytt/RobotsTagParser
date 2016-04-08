@@ -4,7 +4,7 @@ namespace vipnytt\XRobotsTagParser\Adapters;
 use vipnytt\XRobotsTagParser;
 
 /**
- * Class textString
+ * Class TextString
  *
  * Parse line-separated text string
  *

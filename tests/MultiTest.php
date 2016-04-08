@@ -3,11 +3,14 @@ namespace vipnytt\XRobotsTagParser\Tests;
 
 use vipnytt\XRobotsTagParser;
 
+/**
+ * Class MultiTest
+ *
+ * @package vipnytt\XRobotsTagParser\Tests
+ */
 class MultiTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Multi directives test
-     *
      * @dataProvider generateDataForTest
      * @param string $userAgent
      * @param array $headers

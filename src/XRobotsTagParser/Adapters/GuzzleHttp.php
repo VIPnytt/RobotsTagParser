@@ -7,7 +7,7 @@ use vipnytt\XRobotsTagParser;
 /**
  * Class GuzzleHttp
  *
- * Parse from an \GuzzleHttp\Psr7\Response object
+ * Parse from an object witch implements the \Psr\Http\Message\ResponseInterface
  *
  * @package vipnytt\XRobotsTagParser\Adapters
  */

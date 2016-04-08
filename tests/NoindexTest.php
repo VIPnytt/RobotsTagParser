@@ -3,11 +3,14 @@ namespace vipnytt\XRobotsTagParser\Tests;
 
 use vipnytt\XRobotsTagParser;
 
+/**
+ * Class NoindexTest
+ *
+ * @package vipnytt\XRobotsTagParser\Tests
+ */
 class NoindexTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * noindex test
-     *
      * @dataProvider generateDataForTest
      * @param string $userAgent
      * @param array $headers

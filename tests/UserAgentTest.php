@@ -1,8 +1,13 @@
 <?php
-namespace vipnytt\robot\UserAgentParser\Tests;
+namespace vipnytt\XRobotsTagParser\Tests;
 
 use vipnytt\XRobotsTagParser\UserAgentParser;
 
+/**
+ * Class UserAgentTest
+ *
+ * @package vipnytt\XRobotsTagParser\Tests
+ */
 class UserAgentTest extends \PHPUnit_Framework_TestCase
 {
     /**

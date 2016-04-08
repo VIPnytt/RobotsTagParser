@@ -3,11 +3,14 @@ namespace vipnytt\XRobotsTagParser\Tests;
 
 use vipnytt\XRobotsTagParser;
 
+/**
+ * Class UnavailableAfterTest
+ *
+ * @package vipnytt\XRobotsTagParser\Tests
+ */
 class UnavailableAfterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * unavailable_after test
-     *
      * @dataProvider generateDataForTest
      * @param string $userAgent
      * @param array $headers

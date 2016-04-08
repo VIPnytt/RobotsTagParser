@@ -1,6 +1,11 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
+/**
+ * Class NoFollow
+ *
+ * @package vipnytt\XRobotsTagParser\directives
+ */
 final class NoFollow implements DirectiveInterface
 {
     const DIRECTIVE = 'nofollow';

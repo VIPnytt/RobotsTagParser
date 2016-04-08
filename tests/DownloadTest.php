@@ -3,11 +3,14 @@ namespace vipnytt\XRobotsTagParser\Tests;
 
 use vipnytt\XRobotsTagParser;
 
+/**
+ * Class DownloadTest
+ *
+ * @package vipnytt\XRobotsTagParser\Tests
+ */
 class DownloadTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Get rules
-     *
      * @dataProvider generateDataForTest
      * @param string $url
      * @param string $userAgent

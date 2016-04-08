@@ -1,8 +1,15 @@
 <?php
 namespace vipnytt;
 
+use vipnytt\XRobotsTagParser\Exceptions\XRobotsTagParserException;
+use vipnytt\XRobotsTagParser\Rebuild;
+use vipnytt\XRobotsTagParser\UserAgentParser;
+
 /**
- * X-Robots-Tag HTTP header parser class
+ * Class XRobotsTagParser
+ * X-Robots-Tag HTTP header parser
+ *
+ * @package vipnytt
  *
  * @author VIP nytt (vipnytt@gmail.com)
  * @author Jan-Petter Gundersen (europe.jpg@gmail.com)
@@ -14,15 +21,16 @@ namespace vipnytt;
  * Specification:
  * @link https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#using-the-x-robots-tag-http-header
  */
-
-use vipnytt\XRobotsTagParser\Exceptions\XRobotsTagParserException;
-use vipnytt\XRobotsTagParser\Rebuild;
-use vipnytt\XRobotsTagParser\UserAgentParser;
-
 class XRobotsTagParser
 {
+    /**
+     * HTTP header prefix
+     */
     const HEADER_RULE_IDENTIFIER = 'X-Robots-Tag';
 
+    /**
+     * Directives
+     */
     const DIRECTIVE_ALL = 'all';
     const DIRECTIVE_NONE = 'none';
     const DIRECTIVE_NO_ARCHIVE = 'noarchive';
@@ -34,12 +42,39 @@ class XRobotsTagParser
     const DIRECTIVE_NO_TRANSLATE = 'notranslate';
     const DIRECTIVE_UNAVAILABLE_AFTER = 'unavailable_after';
 
+    /**
+     * User-Agent string
+     *
+     * @var string
+     */
     protected $userAgent = '';
+
+    /**
+     * User-Agent for rule selection
+     *
+     * @var string
+     */
     protected $userAgentMatch = '';
 
+    /**
+     * Current rule
+     *
+     * @var string
+     */
     protected $currentRule = '';
+
+    /**
+     * User-Agent for the current rule
+     *
+     * @var string
+     */
     protected $currentUserAgent;
 
+    /**
+     * Rule array
+     *
+     * @var array
+     */
     protected $rules = [];
 
     /**

@@ -6,7 +6,7 @@ use GuzzleHttp\Exception\TransferException;
 use vipnytt\XRobotsTagParser;
 
 /**
- * Class url
+ * Class Url
  *
  * Request the HTTP headers from an URL
  *
@@ -19,7 +19,7 @@ class Url extends XRobotsTagParser\Adapters\GuzzleHttp
      *
      * @param string $url
      * @param string $userAgent
-     * @throws XRobotsTagParser\Exceptions\XrobotsTagParserException
+     * @throws XRobotsTagParser\Exceptions\XRobotsTagParserException
      */
     public function __construct($url, $userAgent = '')
     {

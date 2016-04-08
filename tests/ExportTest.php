@@ -3,11 +3,14 @@ namespace vipnytt\XRobotsTagParser\Tests;
 
 use vipnytt\XRobotsTagParser;
 
+/**
+ * Class ExportTest
+ *
+ * @package vipnytt\XRobotsTagParser\Tests
+ */
 class ExportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Export
-     *
      * @dataProvider generateDataForTest
      * @param string $userAgent
      * @param array $headers

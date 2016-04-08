@@ -28,7 +28,7 @@ Then run `composer update`.
 ### Basic example
 Get all rules affecting _you_, this includes the following:
 - All general rules
-- Rules specific to your User-Agent (if any)
+- Rules specific to _your_ User-Agent (if any)
 ```php
 use vipnytt\XRobotsTagParser;
 

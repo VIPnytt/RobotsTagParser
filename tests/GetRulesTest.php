@@ -3,11 +3,14 @@ namespace vipnytt\XRobotsTagParser\Tests;
 
 use vipnytt\XRobotsTagParser;
 
+/**
+ * Class GetRulesTest
+ *
+ * @package vipnytt\XRobotsTagParser\Tests
+ */
 class GetRulesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Get rules
-     *
      * @dataProvider generateDataForTest
      * @param string $userAgent
      * @param array $headers

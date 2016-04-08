@@ -2,11 +2,10 @@
 namespace vipnytt\XRobotsTagParser;
 
 /**
- * User-Agent parser
+ * Class UserAgentParser
  *
- * @author Jan-Petter Gundersen (europe.jpg@gmail.com)
+ * @package vipnytt\XRobotsTagParser
  */
-
 final class UserAgentParser
 {
     private $userAgent;

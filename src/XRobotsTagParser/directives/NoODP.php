@@ -1,6 +1,11 @@
 <?php
 namespace vipnytt\XRobotsTagParser\directives;
 
+/**
+ * Class NoODP
+ *
+ * @package vipnytt\XRobotsTagParser\directives
+ */
 final class NoODP implements DirectiveInterface
 {
     const DIRECTIVE = 'noodp';
