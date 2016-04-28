@@ -1,10 +1,10 @@
 <?php
-namespace vipnytt\XRobotsTagParser\directives;
+namespace vipnytt\XRobotsTagParser\Directives;
 
 /**
  * Class NoIndex
  *
- * @package vipnytt\XRobotsTagParser\directives
+ * @package vipnytt\XRobotsTagParser\Directives
  */
 final class NoIndex implements DirectiveInterface
 {

@@ -25,7 +25,7 @@ class NoneTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($parser->getRules(false)['nofollow']);
 
         $this->assertTrue(is_string($parser->getDirectiveMeaning('none')));
-        $this->assertTrue(strlen($parser->getDirectiveMeaning('none')) > 30);
+        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('none')) > 30);
     }
 
     /**

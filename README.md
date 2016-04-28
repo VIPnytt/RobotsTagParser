@@ -11,13 +11,17 @@ PHP class to parse X-Robots-Tag HTTP headers according to [Google X-Robots-Tag H
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b89a070f-07d3-490a-841a-0ae995574158/big.png)](https://insight.sensiolabs.com/projects/b89a070f-07d3-490a-841a-0ae995574158)
 
+#### Requirements:
+- PHP [>=5.5](http://php.net/supported-versions.php)
+- PHP [mbstring](http://php.net/manual/en/book.mbstring.php) extension
+
 ## Installation
 The library is available via [Composer](https://getcomposer.org). Add this to your `composer.json` file:
 
 ```json
 {
     "require": {
-        "vipnytt/x-robots-tag-parser": "0.2.*"
+        "vipnytt/x-robots-tag-parser": "~0.2"
     }
 }
 ```
@@ -27,12 +31,16 @@ Then run `composer update`.
 
 ### Basic example
 Get all rules affecting _you_, this includes the following:
-- All general rules
-- Rules specific to _your_ User-Agent (if any)
+- All generic rules
+- Rules specific to _your_ User-Agent (if there is any)
 ```php
 use vipnytt\XRobotsTagParser;
 
-$headers = get_headers('http://example.com/'); // <-- for example only, returns an array
+$headers = [
+    'X-Robots-Tag: noindex, noodp',
+    'X-Robots-Tag: googlebot: noindex, noarchive',
+    'X-Robots-Tag: bingbot: noindex, noarchive, noimageindex'
+];
 
 $parser = new XRobotsTagParser('myUserAgent', $headers);
 $rules = $parser->getRules(); // <-- returns an array of rules
@@ -76,24 +84,24 @@ $array = $parser->getRules();
 ```
 
 ### Export all rules
-Returns an array containing all rules for _any_ User-Agent.
+Returns an array containing _all_ rules for _any_ User-Agent.
 ```php
-use \vipnytt\XRobotsTagParser;
+use vipnytt\XRobotsTagParser;
 
 $parser = new XRobotsTagParser('myUserAgent', $headers);
 $array = $parser->export();
 ```
 
-## Supported directives
+## Supported directives:
 - [x] ````all```` - There are no restrictions for indexing or serving.
-- [x] ````none```` - Equivalent to ````noindex````, ````nofollow````
+- [x] ````none```` - Equivalent to ````noindex```` and ````nofollow````.
 - [x] ````noindex```` - Do not show this page in search results and do not show a "Cached" link in search results.
-- [x] ````nofollow```` - Do not follow the links on this page
+- [x] ````nofollow```` - Do not follow the links on this page.
 - [x] ````noarchive```` - Do not show a "Cached" link in search results.
-- [x] ````nosnippet```` - Do not show a snippet in the search results for this page
-- [x] ````noodp```` - Do not use metadata from the Open Directory project for titles or snippets shown for this page.
+- [x] ````nosnippet```` - Do not show a snippet in the search results for this page.
+- [x] ````noodp```` - Do not use metadata from the [Open Directory project](http://dmoz.org/) for titles or snippets shown for this page.
 - [x] ````notranslate```` - Do not offer translation of this page in search results.
 - [x] ````noimageindex```` - Do not index images on this page.
 - [x] ````unavailable_after```` - Do not show this page in search results after the specified date/time.
 
-Contributing is surely allowed! :-)
+Source: [https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag](https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#valid-indexing--serving-directives)

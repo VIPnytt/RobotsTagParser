@@ -24,7 +24,7 @@ class Url extends XRobotsTagParser\Adapters\GuzzleHttp
     public function __construct($url, $userAgent = '')
     {
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new XRobotsTagParser\Exceptions\XrobotsTagParserException('Invalid URL provided');
+            throw new XRobotsTagParser\Exceptions\XRobotsTagParserException('Invalid URL provided');
         }
         $config = [];
         if (!empty($userAgent)) {
@@ -36,10 +36,10 @@ class Url extends XRobotsTagParser\Adapters\GuzzleHttp
         }
         try {
             $client = new Client($config);
-            $request = $client->Request('GET', $url);
+            $request = $client->request('GET', $url);
             parent::__construct($request, $userAgent);
         } catch (TransferException $e) {
-            throw new XRobotsTagParser\Exceptions\XrobotsTagParserException($e->getMessage());
+            throw new XRobotsTagParser\Exceptions\XRobotsTagParserException($e->getMessage());
         }
     }
 }

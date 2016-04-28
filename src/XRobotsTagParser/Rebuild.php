@@ -89,7 +89,7 @@ final class Rebuild
             return;
         }
         $dateTime = date_create_from_format(DATE_RFC850, $this->directiveArray['unavailable_after']);
-        if ($dateTime !== false && time() >= $dateTime->getTimestamp()) {
+        if ($dateTime !== false && time() >= date_timestamp_get($dateTime)) {
             $this->directiveArray['noindex'] = true;
         }
     }

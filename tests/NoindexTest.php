@@ -25,7 +25,7 @@ class NoindexTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($parser->getRules(false)['noarchive']);
 
         $this->assertTrue(is_string($parser->getDirectiveMeaning('noindex')));
-        $this->assertTrue(strlen($parser->getDirectiveMeaning('noindex')) > 30);
+        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('noindex')) > 30);
     }
 
     /**

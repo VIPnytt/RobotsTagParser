@@ -3,7 +3,6 @@ namespace vipnytt;
 
 use vipnytt\XRobotsTagParser\Exceptions\XRobotsTagParserException;
 use vipnytt\XRobotsTagParser\Rebuild;
-use vipnytt\XRobotsTagParser\UserAgentParser;
 
 /**
  * Class XRobotsTagParser
@@ -100,7 +99,7 @@ class XRobotsTagParser
     public function parse(array $headers)
     {
         foreach ($headers as $header) {
-            $parts = array_map('trim', explode(':', mb_strtolower($header), 2));
+            $parts = array_map('trim', mb_split(':', mb_strtolower($header), 2));
             if (count($parts) < 2 || $parts[0] != mb_strtolower(self::HEADER_RULE_IDENTIFIER)) {
                 // Header is not a rule
                 continue;
@@ -118,14 +117,14 @@ class XRobotsTagParser
      */
     protected function detectDirectives()
     {
-        $directives = array_map('trim', explode(',', $this->currentRule));
-        $pair = array_map('trim', explode(':', $directives[0], 2));
+        $directives = array_map('trim', mb_split(',', $this->currentRule));
+        $pair = array_map('trim', mb_split(':', $directives[0], 2));
         if (count($pair) == 2 && !in_array($pair[0], array_keys($this->directiveClasses()))) {
             $this->currentUserAgent = $pair[0];
             $directives[0] = $pair[1];
         }
         foreach ($directives as $rule) {
-            $directive = trim(explode(':', $rule, 2)[0]);
+            $directive = trim(mb_split(':', $rule, 2)[0]);
             if (in_array($directive, array_keys($this->directiveClasses()))) {
                 $this->addRule($directive);
             }
@@ -166,9 +165,9 @@ class XRobotsTagParser
         if (!isset($this->rules[$this->currentUserAgent])) {
             $this->rules[$this->currentUserAgent] = [];
         }
-        $class = "\\" . __CLASS__ . "\\directives\\" . $this->directiveClasses()[$directive];
+        $class = "\\" . __CLASS__ . "\\Directives\\" . $this->directiveClasses()[$directive];
         $object = new $class($this->currentRule);
-        if (!$object instanceof XRobotsTagParser\directives\DirectiveInterface) {
+        if (!$object instanceof XRobotsTagParser\Directives\DirectiveInterface) {
             throw new XRobotsTagParserException('Unsupported directive class');
         }
         $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], [$object->getDirective() => $object->getValue()]);
@@ -193,7 +192,7 @@ class XRobotsTagParser
     protected function matchUserAgent()
     {
         $userAgentParser = new UserAgentParser($this->userAgent);
-        $match = $userAgentParser->match(array_keys($this->rules), '');
+        $match = $userAgentParser->match(array_keys($this->rules));
         $this->userAgentMatch = (is_string($match)) ? $match : '';
         return $this->userAgentMatch;
     }
@@ -245,9 +244,9 @@ class XRobotsTagParser
         if (!in_array($directive, array_keys($this->directiveClasses()))) {
             throw new XRobotsTagParserException('Unknown directive');
         }
-        $class = "\\" . __CLASS__ . "\\directives\\" . $this->directiveClasses()[$directive];
+        $class = "\\" . __CLASS__ . "\\Directives\\" . $this->directiveClasses()[$directive];
         $object = new $class($this->directiveClasses()[$directive]);
-        if (!$object instanceof XRobotsTagParser\directives\DirectiveInterface) {
+        if (!$object instanceof XRobotsTagParser\Directives\DirectiveInterface) {
             throw new XRobotsTagParserException('Unsupported directive class');
         }
         return $object->getMeaning();

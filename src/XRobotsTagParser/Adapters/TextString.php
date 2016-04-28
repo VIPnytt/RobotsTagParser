@@ -20,7 +20,7 @@ class TextString extends XRobotsTagParser
      */
     public function __construct($string, $userAgent = '')
     {
-        $array = array_map('trim', preg_split('/\R/', $string));
+        $array = array_map('trim', mb_split('\r\n|\n|\r', $string));
         parent::__construct($userAgent, $array);
     }
 }
