@@ -1,10 +1,10 @@
 <?php
-namespace vipnytt\XRobotsTagParser\directives;
+namespace vipnytt\XRobotsTagParser\Directives;
 
 /**
  * Class UnavailableAfter
  *
- * @package vipnytt\XRobotsTagParser\directives
+ * @package vipnytt\XRobotsTagParser\Directives
  */
 final class UnavailableAfter implements DirectiveInterface
 {
@@ -47,13 +47,13 @@ final class UnavailableAfter implements DirectiveInterface
      */
     public function getValue()
     {
-        $parts = explode(',', trim(substr($this->value, mb_stripos($this->value, self::DIRECTIVE) + mb_strlen(self::DIRECTIVE) + 1)));
+        $parts = mb_split(',', trim(substr($this->value, mb_stripos($this->value, self::DIRECTIVE) + mb_strlen(self::DIRECTIVE) + 1)));
         $count = count($parts);
         for ($i = 1; $i <= $count; $i++) {
             foreach ($this->supportedDateFormats as $format) {
                 $dateTime = date_create_from_format($format, trim(implode(',', array_slice($parts, 0, $i))));
                 if ($dateTime !== false) {
-                    return $dateTime->format(DATE_RFC850);
+                    return date_format($dateTime, DATE_RFC850);
                 }
             }
         }

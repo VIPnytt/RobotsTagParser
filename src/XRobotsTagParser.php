@@ -1,6 +1,7 @@
 <?php
 namespace vipnytt;
 
+use vipnytt\XRobotsTagParser\Directives;
 use vipnytt\XRobotsTagParser\Exceptions\XRobotsTagParserException;
 use vipnytt\XRobotsTagParser\Rebuild;
 
