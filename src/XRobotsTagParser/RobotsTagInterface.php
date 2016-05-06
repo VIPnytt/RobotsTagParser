@@ -29,7 +29,7 @@ interface RobotsTagInterface
     const DIRECTIVE_UNAVAILABLE_AFTER = 'unavailable_after';
 
     /**
-     * Directive meanings
+     * Directives and meanings
      * @link https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#valid-indexing--serving-directives
      */
     const DIRECTIVES = [

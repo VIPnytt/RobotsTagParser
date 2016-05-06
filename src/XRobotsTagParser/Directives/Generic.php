@@ -9,10 +9,16 @@ namespace vipnytt\XRobotsTagParser\Directives;
 final class Generic implements DirectiveInterface
 {
     /**
-     * Current directive
+     * Directive
      * @param string
      */
     protected $directive;
+
+    /**
+     * Rule string
+     * @param string
+     */
+    protected $rule;
 
     /**
      * Constructor
@@ -23,6 +29,7 @@ final class Generic implements DirectiveInterface
     public function __construct($directive, $rule)
     {
         $this->directive = mb_strtolower($directive);
+        $this->rule = $rule;
     }
 
     /**
