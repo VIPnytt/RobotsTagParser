@@ -2,11 +2,11 @@
 namespace vipnytt\XRobotsTagParser\Directives;
 
 /**
- * Class Basic
+ * Class Generic
  *
  * @package vipnytt\XRobotsTagParser\Directives
  */
-final class Basic implements DirectiveInterface
+final class Generic implements DirectiveInterface
 {
     /**
      * Current directive

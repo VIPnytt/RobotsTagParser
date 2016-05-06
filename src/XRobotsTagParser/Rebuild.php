@@ -6,7 +6,7 @@ namespace vipnytt\XRobotsTagParser;
  *
  * @package vipnytt\XRobotsTagParser
  */
-final class Rebuild
+final class Rebuild implements RobotsTagInterface
 {
     private $directiveArray;
 
@@ -45,10 +45,10 @@ final class Rebuild
      */
     private function all()
     {
-        if (!isset($this->directiveArray['all'])) {
+        if (!isset($this->directiveArray[self::DIRECTIVE_ALL])) {
             return;
         }
-        unset($this->directiveArray['all']);
+        unset($this->directiveArray[self::DIRECTIVE_ALL]);
     }
 
     /**
@@ -58,10 +58,10 @@ final class Rebuild
      */
     private function noIndex()
     {
-        if (!isset($this->directiveArray['noindex'])) {
+        if (!isset($this->directiveArray[self::DIRECTIVE_NO_INDEX])) {
             return;
         }
-        $this->directiveArray['noarchive'] = true;
+        $this->directiveArray[self::DIRECTIVE_NO_ARCHIVE] = true;
     }
 
     /**
@@ -71,11 +71,11 @@ final class Rebuild
      */
     private function none()
     {
-        if (!isset($this->directiveArray['none'])) {
+        if (!isset($this->directiveArray[self::DIRECTIVE_NONE])) {
             return;
         }
-        $this->directiveArray['noindex'] = true;
-        $this->directiveArray['nofollow'] = true;
+        $this->directiveArray[self::DIRECTIVE_NO_INDEX] = true;
+        $this->directiveArray[self::DIRECTIVE_NO_FOLLOW] = true;
     }
 
     /**
@@ -85,12 +85,12 @@ final class Rebuild
      */
     private function unavailableAfter()
     {
-        if (!isset($this->directiveArray['unavailable_after'])) {
+        if (!isset($this->directiveArray[self::DIRECTIVE_UNAVAILABLE_AFTER])) {
             return;
         }
-        $dateTime = date_create_from_format(DATE_RFC850, $this->directiveArray['unavailable_after']);
+        $dateTime = date_create_from_format(DATE_RFC850, $this->directiveArray[self::DIRECTIVE_UNAVAILABLE_AFTER]);
         if ($dateTime !== false && time() >= date_timestamp_get($dateTime)) {
-            $this->directiveArray['noindex'] = true;
+            $this->directiveArray[self::DIRECTIVE_NO_INDEX] = true;
         }
     }
 

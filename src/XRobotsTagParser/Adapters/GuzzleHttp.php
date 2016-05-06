@@ -22,9 +22,6 @@ class GuzzleHttp extends XRobotsTagParser
      */
     public function __construct(ResponseInterface $response, $userAgent = '')
     {
-        if (!$response instanceof ResponseInterface) {
-            throw new XRobotsTagParser\Exceptions\XRobotsTagParserException('Object is not an instance of `\Psr\Http\Message\ResponseInterface`');
-        }
         parent::__construct($userAgent);
         $headers = [];
         foreach ($response->getHeader(parent::HEADER_RULE_IDENTIFIER) as $name => $values) {

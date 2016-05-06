@@ -6,14 +6,16 @@
 [![Packagist](https://img.shields.io/packagist/v/vipnytt/x-robots-tag-parser.svg)](https://packagist.org/packages/vipnytt/x-robots-tag-parser)
 [![Join the chat at https://gitter.im/VIPnytt/X-Robots-Tag-parser](https://badges.gitter.im/VIPnytt/X-Robots-Tag-parser.svg)](https://gitter.im/VIPnytt/X-Robots-Tag-parser)
 
-# X-Robots-Tag HTTP header parser class
+# X-Robots-Tag HTTP header parser
 PHP class to parse X-Robots-Tag HTTP headers according to [Google X-Robots-Tag HTTP header specifications](https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#using-the-x-robots-tag-http-header).
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b89a070f-07d3-490a-841a-0ae995574158/big.png)](https://insight.sensiolabs.com/projects/b89a070f-07d3-490a-841a-0ae995574158)
 
 #### Requirements:
-- PHP [>=5.5](http://php.net/supported-versions.php)
+- PHP [>=5.6](http://php.net/supported-versions.php)
 - PHP [mbstring](http://php.net/manual/en/book.mbstring.php) extension
+
+Note: HHVM support is planned once [facebook/hhvm#4277](https://github.com/facebook/hhvm/issues/4277) is fixed.
 
 ## Installation
 The library is available via [Composer](https://getcomposer.org). Add this to your `composer.json` file:
