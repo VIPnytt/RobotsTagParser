@@ -8,26 +8,42 @@ namespace vipnytt\XRobotsTagParser\Directives;
  */
 final class UnavailableAfter implements DirectiveInterface
 {
-    const DIRECTIVE = 'unavailable_after';
-    const MEANING = 'Do not show this page in search results after the specified date/time.';
-
+    /**
+     * Google date format
+     * @link https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag
+     */
     const DATE_GOOGLE = 'd M Y H:i:s T';
 
-    private $supportedDateFormats = [
+    /**
+     * Supported date formats
+     */
+    const SUPPORTED_DATE_FORMATS = [
         DATE_RFC850,
         self::DATE_GOOGLE
     ];
 
-    private $value;
+    /**
+     * Current directive
+     * @var string
+     */
+    protected $directive;
+
+    /**
+     * Current rule string
+     * @var string
+     */
+    private $rule;
 
     /**
      * Constructor
      *
+     * @param string $directive
      * @param string $rule
      */
-    public function __construct($rule)
+    public function __construct($directive, $rule)
     {
-        $this->value = $rule;
+        $this->directive = $directive;
+        $this->rule = $rule;
     }
 
     /**
@@ -37,7 +53,7 @@ final class UnavailableAfter implements DirectiveInterface
      */
     public function getDirective()
     {
-        return self::DIRECTIVE;
+        return $this->directive;
     }
 
     /**
@@ -47,10 +63,10 @@ final class UnavailableAfter implements DirectiveInterface
      */
     public function getValue()
     {
-        $parts = mb_split(',', trim(substr($this->value, mb_stripos($this->value, self::DIRECTIVE) + mb_strlen(self::DIRECTIVE) + 1)));
+        $parts = mb_split(',', trim(mb_substr($this->rule, mb_stripos($this->rule, $this->directive) + mb_strlen($this->directive) + 1)));
         $count = count($parts);
         for ($i = 1; $i <= $count; $i++) {
-            foreach ($this->supportedDateFormats as $format) {
+            foreach (self::SUPPORTED_DATE_FORMATS as $format) {
                 $dateTime = date_create_from_format($format, trim(implode(',', array_slice($parts, 0, $i))));
                 if ($dateTime !== false) {
                     return date_format($dateTime, DATE_RFC850);
@@ -59,15 +75,4 @@ final class UnavailableAfter implements DirectiveInterface
         }
         return null;
     }
-
-    /**
-     * Get directive meaning
-     *
-     * @return string
-     */
-    public function getMeaning()
-    {
-        return self::MEANING;
-    }
 }
-

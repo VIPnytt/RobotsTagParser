@@ -42,6 +42,19 @@ class XRobotsTagParser
     const DIRECTIVE_NO_TRANSLATE = 'notranslate';
     const DIRECTIVE_UNAVAILABLE_AFTER = 'unavailable_after';
 
+    const DIRECTIVES = [
+        self::DIRECTIVE_ALL => 'There are no restrictions for indexing or serving. Note: this directive is the default value and has no effect if explicitly listed.',
+        self::DIRECTIVE_NO_ARCHIVE => 'Do not show a `Cached` link in search results.',
+        self::DIRECTIVE_NO_FOLLOW => 'Do not follow the links on this page.',
+        self::DIRECTIVE_NO_IMAGE_INDEX => 'Do not index images on this page.',
+        self::DIRECTIVE_NO_INDEX => 'Do not show this page in search results and do not show a `Cached` link in search results.',
+        self::DIRECTIVE_NONE => 'Equivalent to `noindex` and `nofollow`.',
+        self::DIRECTIVE_NO_ODP => 'Do not use metadata from the `Open Directory project` (http://dmoz.org/) for titles or snippets shown for this page.',
+        self::DIRECTIVE_NO_SNIPPET => 'Do not show a snippet in the search results for this page.',
+        self::DIRECTIVE_NO_TRANSLATE => 'Do not offer translation of this page in search results.',
+        self::DIRECTIVE_UNAVAILABLE_AFTER => 'Do not show this page in search results after the specified date/time.',
+    ];
+
     /**
      * User-Agent string
      *
@@ -120,38 +133,17 @@ class XRobotsTagParser
     {
         $directives = array_map('trim', mb_split(',', $this->currentRule));
         $pair = array_map('trim', mb_split(':', $directives[0], 2));
-        if (count($pair) == 2 && !in_array($pair[0], array_keys($this->directiveClasses()))) {
+        if (count($pair) == 2 && !in_array($pair[0], array_keys(self::DIRECTIVES))) {
             $this->currentUserAgent = $pair[0];
             $directives[0] = $pair[1];
         }
         foreach ($directives as $rule) {
             $directive = trim(mb_split(':', $rule, 2)[0]);
-            if (in_array($directive, array_keys($this->directiveClasses()))) {
+            if (in_array($directive, array_keys(self::DIRECTIVES))) {
                 $this->addRule($directive);
             }
         }
         $this->cleanup();
-    }
-
-    /**
-     * Array of directives and their class names
-     *
-     * @return array
-     */
-    protected function directiveClasses()
-    {
-        return [
-            self::DIRECTIVE_ALL => 'All',
-            self::DIRECTIVE_NO_ARCHIVE => 'NoArchive',
-            self::DIRECTIVE_NO_FOLLOW => 'NoFollow',
-            self::DIRECTIVE_NO_IMAGE_INDEX => 'NoImageIndex',
-            self::DIRECTIVE_NO_INDEX => 'NoIndex',
-            self::DIRECTIVE_NONE => 'None',
-            self::DIRECTIVE_NO_ODP => 'NoODP',
-            self::DIRECTIVE_NO_SNIPPET => 'NoSnippet',
-            self::DIRECTIVE_NO_TRANSLATE => 'NoTranslate',
-            self::DIRECTIVE_UNAVAILABLE_AFTER => 'UnavailableAfter',
-        ];
     }
 
     /**
@@ -166,10 +158,12 @@ class XRobotsTagParser
         if (!isset($this->rules[$this->currentUserAgent])) {
             $this->rules[$this->currentUserAgent] = [];
         }
-        $class = "\\" . __CLASS__ . "\\Directives\\" . $this->directiveClasses()[$directive];
-        $object = new $class($this->currentRule);
-        if (!$object instanceof XRobotsTagParser\Directives\DirectiveInterface) {
-            throw new XRobotsTagParserException('Unsupported directive class');
+        switch ($directive) {
+            case self::DIRECTIVE_UNAVAILABLE_AFTER:
+                $object = new Directives\UnavailableAfter($directive, $this->currentRule);
+                break;
+            default:
+                $object = new Directives\Basic($directive, $this->currentRule);
         }
         $this->rules[$this->currentUserAgent] = array_merge($this->rules[$this->currentUserAgent], [$object->getDirective() => $object->getValue()]);
     }
@@ -194,7 +188,7 @@ class XRobotsTagParser
     {
         $userAgentParser = new UserAgentParser($this->userAgent);
         $match = $userAgentParser->match(array_keys($this->rules));
-        $this->userAgentMatch = (is_string($match)) ? $match : '';
+        $this->userAgentMatch = ($match !== false) ? $match : '';
         return $this->userAgentMatch;
     }
 
@@ -242,14 +236,10 @@ class XRobotsTagParser
      */
     public function getDirectiveMeaning($directive)
     {
-        if (!in_array($directive, array_keys($this->directiveClasses()))) {
+        $directive = mb_strtolower($directive);
+        if (!in_array($directive, array_keys(self::DIRECTIVES))) {
             throw new XRobotsTagParserException('Unknown directive');
         }
-        $class = "\\" . __CLASS__ . "\\Directives\\" . $this->directiveClasses()[$directive];
-        $object = new $class($this->directiveClasses()[$directive]);
-        if (!$object instanceof XRobotsTagParser\Directives\DirectiveInterface) {
-            throw new XRobotsTagParserException('Unsupported directive class');
-        }
-        return $object->getMeaning();
+        return self::DIRECTIVES[$directive];
     }
 }

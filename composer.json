@@ -35,7 +35,7 @@
     "docs": "https://github.com/VIPnytt/X-Robots-Tag-parser/wiki"
   },
   "require": {
-    "php": ">=5.5.0",
+    "php": ">=5.6",
     "guzzlehttp/guzzle": "6.*",
     "vipnytt/useragentparser": "~0.2",
     "ext-mbstring": "*"

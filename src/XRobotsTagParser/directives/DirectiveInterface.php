@@ -11,9 +11,10 @@ interface DirectiveInterface
     /**
      * Constructor
      *
+     * @param string $directive
      * @param string $rule
      */
-    public function __construct($rule);
+    public function __construct($directive, $rule);
 
     /**
      * Get directive name
@@ -28,11 +29,4 @@ interface DirectiveInterface
      * @return bool|string|null
      */
     public function getValue();
-
-    /**
-     * Get meaning
-     *
-     * @return string
-     */
-    public function getMeaning();
 }

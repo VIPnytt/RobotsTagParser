@@ -2,23 +2,27 @@
 namespace vipnytt\XRobotsTagParser\Directives;
 
 /**
- * Class NoFollow
+ * Class Basic
  *
  * @package vipnytt\XRobotsTagParser\Directives
  */
-final class NoFollow implements DirectiveInterface
+final class Basic implements DirectiveInterface
 {
-    const DIRECTIVE = 'nofollow';
-    const MEANING = 'Do not follow the links on this page.';
+    /**
+     * Current directive
+     * @param string
+     */
+    protected $directive;
 
     /**
      * Constructor
      *
+     * @param string $directive
      * @param string $rule
      */
-    public function __construct($rule)
+    public function __construct($directive, $rule)
     {
-
+        $this->directive = mb_strtolower($directive);
     }
 
     /**
@@ -28,26 +32,16 @@ final class NoFollow implements DirectiveInterface
      */
     public function getDirective()
     {
-        return self::DIRECTIVE;
+        return $this->directive;
     }
 
     /**
      * Get value
      *
-     * @return bool|string|null
+     * @return true
      */
     public function getValue()
     {
         return true;
-    }
-
-    /**
-     * Get directive meaning
-     *
-     * @return string
-     */
-    public function getMeaning()
-    {
-        return self::MEANING;
     }
 }
