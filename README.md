@@ -23,7 +23,7 @@ The library is available via [Composer](https://getcomposer.org). Add this to yo
 ```json
 {
     "require": {
-        "vipnytt/robotstagparser": "~0.3"
+        "vipnytt/robotstagparser": "~0.2"
     }
 }
 ```

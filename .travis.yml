@@ -11,4 +11,4 @@ matrix:
 install:
   - composer install
 after_script:
-  - CODECLIMATE_REPO_TOKEN=2006f9fbf9fb0e6b5bc0517c1da861fc5975a87168ffb85c3cb2117d2610c366 ./vendor/bin/test-reporter
+  - CODECLIMATE_REPO_TOKEN=b92d0a7221ef3258c0b20c5e970be1f429757ab324d9decff0cf5810e63eb3a6 ./vendor/bin/test-reporter
