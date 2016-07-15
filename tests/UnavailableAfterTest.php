@@ -20,13 +20,10 @@ class UnavailableAfterTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($userAgent, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->getRules(true));
-        $this->assertTrue($parser->getRules(false)['noindex']);
+        $this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->getRules());
         $this->assertEquals(['unavailable_after' => 'Tuesday, 31-Dec-30 23:00:00 PST'], $parser->export()['']);
         $this->assertEquals(['unavailable_after' => 'Saturday, 01-Jul-00 07:00:00 PST'], $parser->export()['googlebot']);
 
-        $this->assertTrue(is_string($parser->getDirectiveMeaning('unavailable_after')));
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('unavailable_after')) > 30);
     }
 
     /**

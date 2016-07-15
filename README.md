@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/VIPnytt/X-Robots-Tag-parser.svg?branch=master)](https://travis-ci.org/VIPnytt/X-Robots-Tag-parser)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/VIPnytt/X-Robots-Tag-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/VIPnytt/X-Robots-Tag-parser/?branch=master)
-[![Code Climate](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser/badges/gpa.svg)](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser)
-[![Test Coverage](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser/badges/coverage.svg)](https://codeclimate.com/github/VIPnytt/X-Robots-Tag-parser/coverage)
-[![License](https://poser.pugx.org/VIPnytt/X-Robots-Tag-parser/license)](https://github.com/VIPnytt/X-Robots-Tag-parser/blob/master/LICENSE)
-[![Packagist](https://img.shields.io/packagist/v/vipnytt/x-robots-tag-parser.svg)](https://packagist.org/packages/vipnytt/x-robots-tag-parser)
-[![Join the chat at https://gitter.im/VIPnytt/X-Robots-Tag-parser](https://badges.gitter.im/VIPnytt/X-Robots-Tag-parser.svg)](https://gitter.im/VIPnytt/X-Robots-Tag-parser)
+[![Build Status](https://travis-ci.org/VIPnytt/RobotsTagParser.svg?branch=master)](https://travis-ci.org/VIPnytt/RobotsTagParser)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/VIPnytt/RobotsTagParser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/VIPnytt/RobotsTagParser/?branch=master)
+[![Code Climate](https://codeclimate.com/github/VIPnytt/RobotsTagParser/badges/gpa.svg)](https://codeclimate.com/github/VIPnytt/RobotsTagParser)
+[![Test Coverage](https://codeclimate.com/github/VIPnytt/RobotsTagParser/badges/coverage.svg)](https://codeclimate.com/github/VIPnytt/RobotsTagParser/coverage)
+[![License](https://poser.pugx.org/VIPnytt/RobotsTagParser/license)](https://github.com/VIPnytt/RobotsTagParser/blob/master/LICENSE)
+[![Packagist](https://img.shields.io/packagist/v/vipnytt/robotstagparser.svg)](https://packagist.org/packages/vipnytt/robotstagparser)
+[![Gitter](https://badges.gitter.im/VIPnytt/RobotsTagParser.svg)](https://gitter.im/VIPnytt/RobotsTagParser)
 
 # X-Robots-Tag HTTP header parser
 PHP class to parse X-Robots-Tag HTTP headers according to [Google X-Robots-Tag HTTP header specifications](https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#using-the-x-robots-tag-http-header).
@@ -23,7 +23,7 @@ The library is available via [Composer](https://getcomposer.org). Add this to yo
 ```json
 {
     "require": {
-        "vipnytt/x-robots-tag-parser": "~0.2"
+        "vipnytt/robotstagparser": "~0.3"
     }
 }
 ```
@@ -94,16 +94,16 @@ $parser = new XRobotsTagParser('myUserAgent', $headers);
 $array = $parser->export();
 ```
 
-## Supported directives:
-- [x] ````all```` - There are no restrictions for indexing or serving.
-- [x] ````none```` - Equivalent to ````noindex```` and ````nofollow````.
-- [x] ````noindex```` - Do not show this page in search results and do not show a "Cached" link in search results.
-- [x] ````nofollow```` - Do not follow the links on this page.
-- [x] ````noarchive```` - Do not show a "Cached" link in search results.
-- [x] ````nosnippet```` - Do not show a snippet in the search results for this page.
-- [x] ````noodp```` - Do not use metadata from the [Open Directory project](http://dmoz.org/) for titles or snippets shown for this page.
-- [x] ````notranslate```` - Do not offer translation of this page in search results.
-- [x] ````noimageindex```` - Do not index images on this page.
-- [x] ````unavailable_after```` - Do not show this page in search results after the specified date/time.
+## Directives:
+- [x] `all` - There are no restrictions for indexing or serving.
+- [x] `none` - Equivalent to `noindex` and `nofollow`.
+- [x] `noindex` - Do not show this page in search results and do not show a "Cached" link in search results.
+- [x] `nofollow` - Do not follow the links on this page.
+- [x] `noarchive` - Do not show a "Cached" link in search results.
+- [x] `nosnippet` - Do not show a snippet in the search results for this page.
+- [x] `noodp` - Do not use metadata from the [Open Directory project](http://dmoz.org/) for titles or snippets shown for this page.
+- [x] `notranslate` - Do not offer translation of this page in search results.
+- [x] `noimageindex` - Do not index images on this page.
+- [x] `unavailable_after` - Do not show this page in search results after the specified date/time.
 
 Source: [https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag](https://developers.google.com/webmasters/control-crawl-index/docs/robots_meta_tag#valid-indexing--serving-directives)

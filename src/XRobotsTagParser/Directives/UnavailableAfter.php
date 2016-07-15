@@ -19,7 +19,7 @@ final class UnavailableAfter implements DirectiveInterface
      */
     const SUPPORTED_DATE_FORMATS = [
         DATE_RFC850,
-        self::DATE_GOOGLE
+        self::DATE_GOOGLE,
     ];
 
     /**
@@ -65,9 +65,9 @@ final class UnavailableAfter implements DirectiveInterface
     {
         $parts = mb_split(',', trim(mb_substr($this->rule, mb_stripos($this->rule, $this->directive) + mb_strlen($this->directive) + 1)));
         $count = count($parts);
-        for ($i = 1; $i <= $count; $i++) {
+        for ($num = 1; $num <= $count; $num++) {
             foreach (self::SUPPORTED_DATE_FORMATS as $format) {
-                $dateTime = date_create_from_format($format, trim(implode(',', array_slice($parts, 0, $i))));
+                $dateTime = date_create_from_format($format, trim(implode(',', array_slice($parts, 0, $num))));
                 if ($dateTime !== false) {
                     return date_format($dateTime, DATE_RFC850);
                 }

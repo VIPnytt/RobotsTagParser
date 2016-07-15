@@ -18,11 +18,18 @@ class Url extends XRobotsTagParser\Adapters\GuzzleHttp
      * @var array
      */
     protected $config = [
+        'allow_redirects' => [
+            'referer' => true,
+            'strict' => false,
+        ],
+        'connect_timeout' => 30,
+        'decode_content' => true,
         'headers' => [
-            'User-Agent' => 'X-Robots-Tag-parser-VIPnytt/1.0 (+https://github.com/VIPnytt/X-Robots-Tag-parser/blob/master/README.md)',
+            'user-agent' => 'XRobotsTagParser-VIPnytt/1.0 (+https://github.com/VIPnytt/RobotsTagParser/blob/master/README.md)',
         ],
         'http_errors' => false,
-        'timeout' => 30,
+        'timeout' => 120,
+        'verify' => true,
     ];
 
     /**

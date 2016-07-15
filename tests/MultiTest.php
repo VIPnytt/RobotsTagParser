@@ -20,50 +20,41 @@ class MultiTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser\Adapters\TextString($headers, $userAgent);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertTrue($parser->getRules(true)['all']);
+        $this->assertTrue($parser->getRules()['all']);
         $this->assertTrue($parser->export()['']['all']);
         $this->assertTrue($parser->export()['googlebot']['all']);
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('all')) > 30);
 
-        $this->assertTrue($parser->getRules(true)['noindex']);
+        $this->assertTrue($parser->getRules()['noindex']);
         $this->assertTrue($parser->export()['']['noindex']);
         $this->assertTrue($parser->export()['googlebot']['noindex']);
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('noindex')) > 30);
 
-        $this->assertTrue($parser->getRules(true)['nofollow']);
+        $this->assertTrue($parser->getRules()['nofollow']);
         $this->assertTrue($parser->export()['']['nofollow']);
         $this->assertTrue($parser->export()['googlebot']['nofollow']);
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('nofollow')) > 30);
 
-        $this->assertTrue($parser->getRules(true)['none']);
+        $this->assertTrue($parser->getRules()['none']);
         $this->assertTrue($parser->export()['']['none']);
         $this->assertTrue($parser->export()['googlebot']['none']);
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('none')) > 30);
 
-        $this->assertTrue($parser->getRules(true)['noarchive']);
+        $this->assertTrue($parser->getRules()['noarchive']);
         $this->assertTrue($parser->export()['']['noarchive']);
         $this->assertTrue($parser->export()['googlebot']['noarchive']);
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('noarchive')) > 30);
 
-        $this->assertTrue($parser->getRules(true)['nosnippet']);
+        $this->assertTrue($parser->getRules()['nosnippet']);
         $this->assertTrue($parser->export()['']['nosnippet']);
         $this->assertTrue($parser->export()['googlebot']['nosnippet']);
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('nosnippet')) > 30);
 
-        $this->assertTrue($parser->getRules(true)['noodp']);
+        $this->assertTrue($parser->getRules()['noodp']);
         $this->assertTrue($parser->export()['']['noodp']);
         $this->assertTrue($parser->export()['googlebot']['noodp']);
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('noodp')) > 30);
 
-        $this->assertTrue($parser->getRules(true)['notranslate']);
+        $this->assertTrue($parser->getRules()['notranslate']);
         $this->assertTrue($parser->export()['']['notranslate']);
         $this->assertTrue($parser->export()['googlebot']['notranslate']);
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('notranslate')) > 30);
 
-        $this->assertTrue($parser->getRules(true)['noimageindex']);
+        $this->assertTrue($parser->getRules()['noimageindex']);
         $this->assertTrue($parser->export()['']['noimageindex']);
         $this->assertTrue($parser->export()['googlebot']['noimageindex']);
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('noimageindex')) > 30);
     }
 
     /**

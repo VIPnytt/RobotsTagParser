@@ -20,9 +20,9 @@ class GetRulesTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($userAgent, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertTrue($parser->getRules(true)['noindex']);
-        $this->assertTrue($parser->getRules(true)['noarchive']);
-        $this->assertTrue($parser->getRules(true)['noodp']);
+        $this->assertTrue($parser->getRules()['noindex']);
+        $this->assertTrue($parser->getRules()['noarchive']);
+        $this->assertTrue($parser->getRules()['noodp']);
     }
 
     /**

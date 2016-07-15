@@ -3,7 +3,6 @@ namespace vipnytt;
 
 use vipnytt\XRobotsTagParser\Directives;
 use vipnytt\XRobotsTagParser\Exceptions\XRobotsTagParserException;
-use vipnytt\XRobotsTagParser\Rebuild;
 use vipnytt\XRobotsTagParser\RobotsTagInterface;
 
 /**
@@ -16,7 +15,7 @@ use vipnytt\XRobotsTagParser\RobotsTagInterface;
  * @author Jan-Petter Gundersen (europe.jpg@gmail.com)
  *
  * Project:
- * @link https://github.com/VIPnytt/X-Robots-Tag-parser
+ * @link https://github.com/VIPnytt/RobotsTagParser
  * @license https://opensource.org/licenses/MIT MIT license
  *
  * Specification:
@@ -29,14 +28,14 @@ class XRobotsTagParser implements RobotsTagInterface
      *
      * @var string
      */
-    protected $userAgent = '';
+    protected $userAgent = self::USER_AGENT;
 
     /**
      * User-Agent for rule selection
      *
      * @var string
      */
-    protected $userAgentMatch = '';
+    protected $userAgentMatch = self::USER_AGENT;
 
     /**
      * Current rule
@@ -63,12 +62,12 @@ class XRobotsTagParser implements RobotsTagInterface
      * Constructor
      *
      * @param string $userAgent
-     * @param array $headers
+     * @param array|null $headers
      */
-    public function __construct($userAgent = '', $headers = null)
+    public function __construct($userAgent = self::USER_AGENT, $headers = null)
     {
         $this->userAgent = $userAgent;
-        if (isset($headers)) {
+        if (!empty($headers)) {
             $this->parse($headers);
         }
     }
@@ -102,13 +101,13 @@ class XRobotsTagParser implements RobotsTagInterface
     {
         $directives = array_map('trim', mb_split(',', $this->currentRule));
         $pair = array_map('trim', mb_split(':', $directives[0], 2));
-        if (count($pair) == 2 && !in_array($pair[0], array_keys(self::DIRECTIVES))) {
+        if (count($pair) == 2 && !in_array($pair[0], self::DIRECTIVES)) {
             $this->currentUserAgent = $pair[0];
             $directives[0] = $pair[1];
         }
         foreach ($directives as $rule) {
             $directive = trim(mb_split(':', $rule, 2)[0]);
-            if (in_array($directive, array_keys(self::DIRECTIVES))) {
+            if (in_array($directive, self::DIRECTIVES)) {
                 $this->addRule($directive);
             }
         }
@@ -145,7 +144,7 @@ class XRobotsTagParser implements RobotsTagInterface
     protected function cleanup()
     {
         $this->currentRule = '';
-        $this->currentUserAgent = '';
+        $this->currentUserAgent = self::USER_AGENT;
     }
 
     /**
@@ -156,31 +155,25 @@ class XRobotsTagParser implements RobotsTagInterface
     protected function matchUserAgent()
     {
         $userAgentParser = new UserAgentParser($this->userAgent);
-        $match = $userAgentParser->match(array_keys($this->rules));
-        $this->userAgentMatch = ($match !== false) ? $match : '';
+        $this->userAgentMatch = (($match = $userAgentParser->getMostSpecific(array_keys($this->rules))) !== false) ? $match : self::USER_AGENT;
         return $this->userAgentMatch;
     }
 
     /**
      * Return all applicable rules
      *
-     * @param bool $raw
      * @return array
      */
-    public function getRules($raw = false)
+    public function getRules()
     {
         $rules = [];
         // Default UserAgent
-        if (isset($this->rules[''])) {
-            $rules = array_merge($rules, $this->rules['']);
+        if (isset($this->rules[self::USER_AGENT])) {
+            $rules = array_merge($rules, $this->rules[self::USER_AGENT]);
         }
         // Matching UserAgent
         if (isset($this->rules[$this->userAgentMatch])) {
             $rules = array_merge($rules, $this->rules[$this->userAgentMatch]);
-        }
-        if (!$raw) {
-            $rebuild = new Rebuild($rules);
-            $rules = $rebuild->getResult();
         }
         // Result
         return $rules;
@@ -194,21 +187,5 @@ class XRobotsTagParser implements RobotsTagInterface
     public function export()
     {
         return $this->rules;
-    }
-
-    /**
-     * Get the meaning of an Directive
-     *
-     * @param string $directive
-     * @return string
-     * @throws XRobotsTagParserException
-     */
-    public function getDirectiveMeaning($directive)
-    {
-        $directive = mb_strtolower($directive);
-        if (!in_array($directive, array_keys(self::DIRECTIVES))) {
-            throw new XRobotsTagParserException('Unknown directive');
-        }
-        return self::DIRECTIVES[$directive];
     }
 }

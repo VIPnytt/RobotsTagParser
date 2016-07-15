@@ -20,12 +20,7 @@ class NoneTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($userAgent, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertTrue($parser->getRules(true)['none']);
-        $this->assertTrue($parser->getRules(false)['noindex']);
-        $this->assertTrue($parser->getRules(false)['nofollow']);
-
-        $this->assertTrue(is_string($parser->getDirectiveMeaning('none')));
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('none')) > 30);
+        $this->assertTrue($parser->getRules()['none']);
     }
 
     /**

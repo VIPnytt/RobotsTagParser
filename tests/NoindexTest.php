@@ -20,12 +20,7 @@ class NoindexTest extends \PHPUnit_Framework_TestCase
         $parser = new XRobotsTagParser($userAgent, $headers);
         $this->assertInstanceOf('vipnytt\XRobotsTagParser', $parser);
 
-        $this->assertTrue($parser->getRules(true)['noindex']);
-        $this->assertTrue($parser->getRules(false)['noindex']);
-        $this->assertTrue($parser->getRules(false)['noarchive']);
-
-        $this->assertTrue(is_string($parser->getDirectiveMeaning('noindex')));
-        $this->assertTrue(mb_strlen($parser->getDirectiveMeaning('noindex')) > 30);
+        $this->assertTrue($parser->getRules()['noindex']);
     }
 
     /**
